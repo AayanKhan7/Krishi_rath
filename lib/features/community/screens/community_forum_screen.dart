@@ -9,23 +9,34 @@ class CommunityForumScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final tr = localizationService.translate;
 
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // Adaptive sizes
+    final double padding = screenWidth * 0.04;
+    final double iconSize = screenWidth * 0.1;
+    final double titleFontSize = screenWidth * 0.045;
+    final double subtitleFontSize = screenWidth * 0.035;
+    final double chipHeight = screenHeight * 0.05;
+    final double chipSpacing = screenWidth * 0.02;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(tr('community_title')),
         actions: [
           IconButton(
-            icon: const Icon(Icons.filter_list),
+            icon: Icon(Icons.filter_list, size: iconSize * 0.6),
             onPressed: () {},
           ),
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(padding),
         children: [
-          _buildFilterChips(tr),
-          const SizedBox(height: 16),
-          _buildShareExperienceCard(context, tr),
-          const SizedBox(height: 16),
+          _buildFilterChips(tr, chipHeight, chipSpacing, titleFontSize),
+          SizedBox(height: padding),
+          _buildShareExperienceCard(context, tr, iconSize, titleFontSize, subtitleFontSize, padding),
+          SizedBox(height: padding),
           // Example Forum Posts
           const ForumPost(
             userName: 'Ramesh Kumar',
@@ -68,30 +79,30 @@ class CommunityForumScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFilterChips(String Function(String) tr) {
+  Widget _buildFilterChips(String Function(String) tr, double height, double spacing, double fontSize) {
     return SizedBox(
-      height: 40,
+      height: height,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          _buildFilterChip(tr('updates_tab_all'), isSelected: true),
-          _buildFilterChip('🌾'),
-          _buildFilterChip('📞'),
-          _buildFilterChip('💡'),
-          _buildFilterChip('🏛️'),
+          _buildFilterChip(tr('updates_tab_all'), isSelected: true, fontSize: fontSize, height: height, spacing: spacing),
+          _buildFilterChip('🌾', fontSize: fontSize, height: height, spacing: spacing),
+          _buildFilterChip('📞', fontSize: fontSize, height: height, spacing: spacing),
+          _buildFilterChip('💡', fontSize: fontSize, height: height, spacing: spacing),
+          _buildFilterChip('🏛️', fontSize: fontSize, height: height, spacing: spacing),
         ],
       ),
     );
   }
 
-  Widget _buildFilterChip(String label, {bool isSelected = false}) {
+  Widget _buildFilterChip(String label, {bool isSelected = false, required double fontSize, required double height, required double spacing}) {
     return Padding(
-      padding: const EdgeInsets.only(right: 8.0),
+      padding: EdgeInsets.only(right: spacing),
       child: Chip(
-        label: Text(label),
+        label: Text(label, style: TextStyle(fontSize: fontSize)),
         backgroundColor: isSelected ? Colors.green[100] : Colors.grey[200],
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(height / 2),
           side: BorderSide(
             color: isSelected ? Colors.green : Colors.grey,
           ),
@@ -100,29 +111,28 @@ class CommunityForumScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildShareExperienceCard(
-      BuildContext context, String Function(String) tr) {
+  Widget _buildShareExperienceCard(BuildContext context, String Function(String) tr,
+      double iconSize, double titleFontSize, double subtitleFontSize, double padding) {
     return Card(
       color: Colors.blue[50],
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(padding),
         child: Column(
           children: [
-            Icon(Icons.mic, color: Theme.of(context).primaryColor, size: 40),
-            const SizedBox(height: 8),
+            Icon(Icons.mic, color: Theme.of(context).primaryColor, size: iconSize),
+            SizedBox(height: padding / 2),
             Text(
               tr('community_share_experience'),
               textAlign: TextAlign.center,
-              style:
-              const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: titleFontSize, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: padding / 4),
             Text(
               tr('community_share_experience_subtitle'),
               textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.grey),
+              style: TextStyle(fontSize: subtitleFontSize, color: Colors.grey),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: padding),
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
@@ -130,7 +140,7 @@ class CommunityForumScreen extends StatelessWidget {
                 foregroundColor: Colors.white,
                 shape: const StadiumBorder(),
               ),
-              child: Text(tr('community_record_button')),
+              child: Text(tr('community_record_button'), style: TextStyle(fontSize: subtitleFontSize)),
             ),
           ],
         ),
@@ -138,4 +148,3 @@ class CommunityForumScreen extends StatelessWidget {
     );
   }
 }
-

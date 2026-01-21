@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:krishi_rath/features/diary/models/diary_models.dart';
+import 'package:krishi_rath/services/localization_service.dart';
 
 class TodaysActivityCard extends StatelessWidget {
   final Activity activity;
@@ -15,15 +16,26 @@ class TodaysActivityCard extends StatelessWidget {
     required this.onAddDetails,
   });
 
+  String _tr(String key) => localizationService.translate(key);
+
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    final double padding = screenWidth * 0.03;
+    final double iconSize = screenWidth * 0.07;
+    final double titleFontSize = screenWidth * 0.045;
+    final double subtitleFontSize = screenWidth * 0.035;
+    final double buttonFontSize = screenWidth * 0.035;
+    final double spacing = screenHeight * 0.008;
+
     bool isCompleted = activity.status == ActivityStatus.completed;
-    // Check if details have been added
     bool hasDetails = activity.notes.isNotEmpty || activity.expenses > 0;
 
     return Card(
       elevation: 2,
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      margin: EdgeInsets.symmetric(vertical: spacing),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
@@ -31,14 +43,14 @@ class TodaysActivityCard extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: EdgeInsets.all(padding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Icon(activity.icon, color: Theme.of(context).primaryColor),
-                const SizedBox(width: 12),
+                Icon(activity.icon, color: Theme.of(context).primaryColor, size: iconSize),
+                SizedBox(width: padding),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,14 +59,14 @@ class TodaysActivityCard extends StatelessWidget {
                         activity.title,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                          fontSize: titleFontSize,
                           decoration: isCompleted ? TextDecoration.lineThrough : null,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: spacing),
                       Text(
                         planTitle,
-                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                        style: TextStyle(fontSize: subtitleFontSize, color: Colors.grey),
                       ),
                     ],
                   ),
@@ -63,22 +75,25 @@ class TodaysActivityCard extends StatelessWidget {
                   value: isCompleted,
                   onChanged: onStatusChanged,
                   activeColor: Colors.green,
+                  visualDensity: VisualDensity.compact,
                 ),
               ],
             ),
-            const Divider(height: 20),
+            Divider(height: spacing * 4),
             Align(
               alignment: Alignment.centerRight,
               child: TextButton.icon(
-                // Change style based on whether details exist
                 icon: Icon(
                   hasDetails ? Icons.edit_note : Icons.note_add_outlined,
-                  size: 16,
+                  size: iconSize * 0.8,
                   color: hasDetails ? Colors.green : null,
                 ),
                 label: Text(
-                  hasDetails ? 'View/Edit Details' : 'Add Details',
-                  style: TextStyle(color: hasDetails ? Colors.green : null),
+                  hasDetails ? _tr('diary_view_edit_details') : _tr('diary_add_details'),
+                  style: TextStyle(
+                    fontSize: buttonFontSize,
+                    color: hasDetails ? Colors.green : null,
+                  ),
                 ),
                 onPressed: onAddDetails,
               ),

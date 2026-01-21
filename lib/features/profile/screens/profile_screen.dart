@@ -1,8 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:krishi_rath/services/localization_service.dart';
 
-class ProfileScreen extends StatelessWidget {
+// 1. Converted to StatefulWidget
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  // 2. Added state variables
+  bool _isEditing = false;
+  late TextEditingController _nameController;
+  late TextEditingController _locationController;
+
+  // Store initial values to reset on cancel
+  final String _initialName = 'Raj Kumar';
+  final String _initialLocation = 'Nashik, Maharashtra';
+
+  // Helper to get initials
+  String _getInitials(String name) {
+    String initials = '';
+    if (name.isNotEmpty) {
+      final parts = name.split(' ');
+      if (parts.length >= 2) {
+        initials = parts[0][0] + parts[1][0]; // "RK"
+      } else {
+        initials = parts[0].substring(0, 1); // "R"
+      }
+    }
+    return initials.toUpperCase();
+  }
+
+  // 3. Initialize controllers in initState
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(text: _initialName);
+    _locationController = TextEditingController(text: _initialLocation);
+  }
+
+  // 4. Dispose controllers
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _locationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +69,7 @@ class ProfileScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          _buildHeader(context),
+          _buildHeader(context), // This method is now dynamic
           _buildSection(
             context,
             title: tr('profile_farm_info'),
@@ -47,12 +92,13 @@ class ProfileScreen extends StatelessWidget {
             child: _buildEmergencyContacts(),
           ),
           _buildSignOutButton(context),
-          const SizedBox(height: 20), // Add some padding at the bottom
+          const SizedBox(height: 20),
         ],
       ),
     );
   }
 
+  // 5. _buildHeader is now dynamic based on _isEditing
   Widget _buildHeader(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(24),
@@ -62,41 +108,128 @@ class ProfileScreen extends StatelessWidget {
           CircleAvatar(
             radius: 30,
             backgroundColor: Colors.white.withOpacity(0.8),
-            child: const Text('RK',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            child: Text(
+              // Use controller text to get initials, so it updates on save
+              _getInitials(_nameController.text),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
           ),
           const SizedBox(width: 16),
-          const Expanded(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Raj Kumar',
-                  style: TextStyle(
+                // --- Conditional Name Widget ---
+                _isEditing
+                    ? _buildEditableTextField(
+                  _nameController,
+                  const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+                    : Text(
+                  _nameController.text, // Read from controller
+                  style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Row(
                   children: [
-                    Icon(Icons.location_on, color: Colors.white70, size: 16),
-                    SizedBox(width: 4),
-                    Text('Nashik, Maharashtra',
-                        style: TextStyle(color: Colors.white70)),
+                    const Icon(Icons.location_on,
+                        color: Colors.white70, size: 16),
+                    const SizedBox(width: 4),
+                    // --- Conditional Location Widget ---
+                    _isEditing
+                        ? Expanded(
+                      child: _buildEditableTextField(
+                        _locationController,
+                        const TextStyle(color: Colors.white70),
+                      ),
+                    )
+                        : Text(
+                      _locationController.text, // Read from controller
+                      style: const TextStyle(color: Colors.white70),
+                    ),
                   ],
                 ),
               ],
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.edit, color: Colors.white),
-            onPressed: () {},
-          )
+          // 6. Dynamic Edit/Save/Cancel Buttons
+          _isEditing ? _buildEditButtons() : _buildViewButtons(),
         ],
       ),
     );
   }
+
+  // Helper for a clean text field
+  Widget _buildEditableTextField(
+      TextEditingController controller, TextStyle style) {
+    return TextField(
+      controller: controller,
+      style: style,
+      cursorColor: Colors.white,
+      decoration: InputDecoration(
+        isDense: true,
+        contentPadding: const EdgeInsets.all(0),
+        border: InputBorder.none,
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.5)),
+        ),
+      ),
+    );
+  }
+
+  // 7. Button logic widgets
+  Widget _buildViewButtons() {
+    return IconButton(
+      icon: const Icon(Icons.edit, color: Colors.white),
+      onPressed: () {
+        setState(() {
+          _isEditing = true;
+        });
+      },
+    );
+  }
+
+  Widget _buildEditButtons() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // --- Save Button ---
+        IconButton(
+          icon: const Icon(Icons.save, color: Colors.white),
+          onPressed: () {
+            setState(() {
+              // Here you would call your API or update your state management
+              // For now, we just exit edit mode. The controllers
+              // already hold the new values.
+              _isEditing = false;
+            });
+          },
+        ),
+        // --- Cancel Button ---
+        IconButton(
+          icon: const Icon(Icons.cancel, color: Colors.white70),
+          onPressed: () {
+            setState(() {
+              // Reset text to initial values
+              _nameController.text = _initialName;
+              _locationController.text = _initialLocation;
+              _isEditing = false;
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  // --- All other helper methods remain the same ---
+  // (Moved inside the State class so they can access `tr`)
 
   Widget _buildSection(BuildContext context,
       {required String title, required Widget child}) {
@@ -218,7 +351,7 @@ class ProfileScreen extends StatelessWidget {
       children: [
         _buildInfoItem(tr('profile_primary_contact'), '+91 98765 43210'),
         const SizedBox(height: 8),
-        _buildInfoItem('Nashik, Maharashtra', ''),
+        _buildInfoItem(tr('profile_email'), 'raj.kumar@example.com'),
       ],
     );
   }
@@ -256,4 +389,3 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 }
-

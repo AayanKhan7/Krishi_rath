@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:krishi_rath/common/widgets/listen_button.dart';
 import 'package:krishi_rath/common/widgets/priority_tag.dart';
-// This is the line that has been corrected
 import 'package:krishi_rath/services/localization_service.dart';
 
 class SchemeCard extends StatelessWidget {
@@ -28,71 +27,94 @@ class SchemeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final tr = localizationService.translate;
 
-    // Translate all the text keys first
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // Dynamic sizing
+    final horizontalPadding = screenWidth * 0.04;
+    final verticalPadding = screenHeight * 0.015;
+    final titleFontSize = screenWidth * 0.045;
+    final descriptionFontSize = screenWidth * 0.038;
+    final amountFontSize = screenWidth * 0.043;
+    final infoFontSize = screenWidth * 0.035;
+
+    // Translate text
     final title = tr(titleKey);
     final description = tr(descriptionKey);
     final status = tr(statusKey);
     final amount = tr(amountKey);
-
-    // Combine the title and description for the ListenButton
     final textToSpeak = '$title. $description';
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: EdgeInsets.only(bottom: verticalPadding * 2),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.symmetric(
+          horizontal: horizontalPadding,
+          vertical: verticalPadding,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const CircleAvatar(
+                CircleAvatar(
+                  radius: screenWidth * 0.06,
                   backgroundColor: Colors.amber,
-                  child: Icon(Icons.monetization_on, color: Colors.white),
+                  child: Icon(Icons.monetization_on, color: Colors.white, size: screenWidth * 0.06),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: horizontalPadding),
                 Expanded(
                   child: Text(
                     title,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 16),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: titleFontSize,
+                    ),
                   ),
                 ),
                 PriorityTag(priority: tr(tagKey)),
               ],
             ),
-            const SizedBox(height: 12),
-            Text(description),
-            const SizedBox(height: 16),
+            SizedBox(height: verticalPadding),
+            Text(
+              description,
+              style: TextStyle(fontSize: descriptionFontSize),
+            ),
+            SizedBox(height: verticalPadding * 2),
             Row(
               children: [
                 Chip(
                   label: Text(status),
                   backgroundColor: Colors.green[100],
-                  labelStyle: TextStyle(color: Colors.green[800]),
+                  labelStyle: TextStyle(
+                    color: Colors.green[800],
+                    fontSize: infoFontSize,
+                  ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: horizontalPadding),
                 Text(
                   amount,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: amountFontSize,
+                  ),
                 ),
-                const Spacer(),
+                Spacer(),
                 ListenButton(textToSpeak: textToSpeak),
               ],
             ),
-            const Divider(height: 24),
+            Divider(height: verticalPadding * 4),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   '${tr('schemes_deadline')}: $deadline',
-                  style: const TextStyle(color: Colors.grey, fontSize: 12),
+                  style: TextStyle(color: Colors.grey, fontSize: infoFontSize),
                 ),
                 Text(
                   '${tr('schemes_helpline')}: $helpline',
-                  style: const TextStyle(color: Colors.grey, fontSize: 12),
+                  style: TextStyle(color: Colors.grey, fontSize: infoFontSize),
                 ),
               ],
             ),
@@ -102,4 +124,3 @@ class SchemeCard extends StatelessWidget {
     );
   }
 }
-

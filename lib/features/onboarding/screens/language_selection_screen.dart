@@ -26,29 +26,13 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   String? _currentlySpeaking;
 
   final List<LanguageOption> languages = [
-    LanguageOption('Assamese', 'অসমীয়া', 'as-IN', 'as'),
-    LanguageOption('Bengali', 'বাংলা', 'bn-IN', 'bn'),
-    LanguageOption('Bodo', 'बड़ो', 'brx-IN', 'brx'),
-    LanguageOption('Dogri', 'डोगरी', 'doi-IN', 'doi'),
     LanguageOption('English', 'English', 'en-US', 'en'),
-    LanguageOption('Gujarati', 'ગુજરાતી', 'gu-IN', 'gu'),
     LanguageOption('Hindi', 'हिन्दी', 'hi-IN', 'hi'),
-    LanguageOption('Kannada', 'ಕನ್ನಡ', 'kn-IN', 'kn'),
-    LanguageOption('Kashmiri', 'कॉशुर', 'ks-IN', 'ks'),
-    LanguageOption('Konkani', 'कोंकणी', 'kok-IN', 'kok'),
-    LanguageOption('Maithili', 'मैथिली', 'mai-IN', 'mai'),
-    LanguageOption('Malayalam', 'മലയാളം', 'ml-IN', 'ml'),
-    LanguageOption('Manipuri', 'মৈতৈলোন্', 'mni-IN', 'mni'),
     LanguageOption('Marathi', 'मराठी', 'mr-IN', 'mr'),
-    LanguageOption('Nepali', 'नेपाली', 'ne-IN', 'ne'),
-    LanguageOption('Oriya', 'ଓଡ଼ିଆ', 'or-IN', 'or'),
-    LanguageOption('Punjabi', 'ਪੰਜਾਬੀ', 'pa-IN', 'pa'),
-    LanguageOption('Sanskrit', 'संस्कृतम्', 'sa-IN', 'sa'),
-    LanguageOption('Santali', 'ᱥᱟᱱᱛᱟᱲᱤ', 'sat-IN', 'sat'),
-    LanguageOption('Sindhi', 'सिन्धी', 'sd-IN', 'sd'),
-    LanguageOption('Tamil', 'தமிழ்', 'ta-IN', 'ta'),
-    LanguageOption('Telugu', 'తెలుగు', 'te-IN', 'te'),
-    LanguageOption('Urdu', 'اُردُو', 'ur-IN', 'ur'),
+    // LanguageOption('Assamese', 'অসমীয়া', 'as-IN', 'as'),
+    // LanguageOption('Bengali', 'বাংলা', 'bn-IN', 'bn'),
+    // LanguageOption('Bodo', 'बड़ो', 'brx-IN', 'brx'),
+    // ... other languages commented out
   ];
 
   @override
@@ -73,10 +57,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
 
   // Function to speak the selected language name AND set the app's language
   Future<void> _speak(LanguageOption language) async {
-    // Stop any currently playing speech
     await flutterTts.stop();
-
-    // Set the app's language
     localizationService.setLocale(Locale(language.localeCode));
 
     setState(() {
@@ -87,7 +68,6 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
       await flutterTts.setLanguage(language.languageCode);
       await flutterTts.speak(language.nativeName);
     } catch (e) {
-      // Fallback to English if language is not supported by TTS
       print('TTS error for ${language.englishName}: $e');
       await flutterTts.setLanguage('en-US');
       await flutterTts.speak(language.englishName);
@@ -113,29 +93,32 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.lightGreen[50],
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0), // Reduced padding for more space
+          padding: EdgeInsets.all(screenWidth * 0.04),
           child: Column(
             children: [
-              const SizedBox(height: 10),
-              _buildHeader(),
-              const SizedBox(height: 15),
-              _buildInfoBox(),
-              const SizedBox(height: 15),
+              SizedBox(height: screenHeight * 0.015),
+              _buildHeader(screenWidth),
+              SizedBox(height: screenHeight * 0.02),
+              _buildInfoBox(screenWidth),
+              SizedBox(height: screenHeight * 0.02),
               Expanded(
                 child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                    childAspectRatio: 2.0, // Slightly smaller aspect ratio
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: screenWidth > 600 ? 3 : 2,
+                    crossAxisSpacing: screenWidth * 0.03,
+                    mainAxisSpacing: screenHeight * 0.015,
+                    childAspectRatio: 2.0,
                   ),
                   itemCount: languages.length,
                   itemBuilder: (context, index) {
-                    return _buildLanguageButton(languages[index]);
+                    return _buildLanguageButton(languages[index], screenWidth);
                   },
                 ),
               ),
@@ -146,45 +129,46 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
     );
   }
 
-  Widget _buildHeader() {
-    return const Column(
+  Widget _buildHeader(double screenWidth) {
+    return Column(
       children: [
         CircleAvatar(
-          radius: 35, // Slightly smaller
+          radius: screenWidth * 0.09,
           backgroundColor: Colors.green,
-          child: Icon(Icons.agriculture, color: Colors.white, size: 35),
+          child: Icon(Icons.agriculture, color: Colors.white, size: screenWidth * 0.09),
         ),
-        SizedBox(height: 12),
+        SizedBox(height: screenWidth * 0.03),
         Text(
           'Krishi Rath',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: screenWidth * 0.06, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 6),
+        SizedBox(height: screenWidth * 0.015),
         Text(
           'Choose your language / अपनी भाषा चुनें',
-          style: TextStyle(fontSize: 14, color: Colors.black54),
+          style: TextStyle(fontSize: screenWidth * 0.035, color: Colors.black54),
           textAlign: TextAlign.center,
         ),
       ],
     );
   }
 
-  Widget _buildInfoBox() {
+  Widget _buildInfoBox(double screenWidth) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03, vertical: screenWidth * 0.025),
       decoration: BoxDecoration(
         color: Colors.blue[50],
         borderRadius: BorderRadius.circular(10),
       ),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.volume_up, color: Colors.blue, size: 18),
-          SizedBox(width: 6),
+          Icon(Icons.volume_up, color: Colors.blue, size: screenWidth * 0.045),
+          SizedBox(width: screenWidth * 0.015),
           Flexible(
             child: Text(
               'Tap any language to hear it spoken',
-              style: TextStyle(fontSize: 13),
+              style: TextStyle(fontSize: screenWidth * 0.035),
               textAlign: TextAlign.center,
             ),
           ),
@@ -193,7 +177,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
     );
   }
 
-  Widget _buildLanguageButton(LanguageOption lang) {
+  Widget _buildLanguageButton(LanguageOption lang, double screenWidth) {
     final bool isSpeaking = _currentlySpeaking == lang.languageCode;
     return Card(
       elevation: 2,
@@ -209,25 +193,25 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
         onTap: () => _speak(lang),
         borderRadius: BorderRadius.circular(10),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(screenWidth * 0.025),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 lang.nativeName,
-                style: const TextStyle(
-                  fontSize: 16,
+                style: TextStyle(
+                  fontSize: screenWidth * 0.045,
                   fontWeight: FontWeight.w500,
                 ),
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 2),
+              SizedBox(height: screenWidth * 0.008),
               Text(
                 lang.englishName,
-                style: const TextStyle(
-                  fontSize: 10,
+                style: TextStyle(
+                  fontSize: screenWidth * 0.03,
                   color: Colors.grey,
                 ),
                 textAlign: TextAlign.center,
