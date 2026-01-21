@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:krishi_rath/features/diary/models/diary_models.dart';
+import 'package:krishi_rath/services/localization_service.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class FullCalendarScreen extends StatefulWidget {
@@ -15,6 +16,8 @@ class _FullCalendarScreenState extends State<FullCalendarScreen> {
   late final ValueNotifier<List<Activity>> _selectedEvents;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
+
+  String _tr(String key) => localizationService.translate(key);
 
   @override
   void initState() {
@@ -41,9 +44,20 @@ class _FullCalendarScreenState extends State<FullCalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final horizontalPadding = screenWidth * 0.03;
+    final verticalPadding = screenHeight * 0.015;
+    final iconSize = screenWidth * 0.06;
+    final fontSizeTitle = screenWidth * 0.045;
+    final fontSizeSubtitle = screenWidth * 0.035;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.plan.title),
+        title: Text(
+          widget.plan.title,
+          style: TextStyle(fontSize: fontSizeTitle),
+        ),
       ),
       body: Column(
         children: [
@@ -54,7 +68,7 @@ class _FullCalendarScreenState extends State<FullCalendarScreen> {
             selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
             eventLoader: _getEventsForDay,
             onDaySelected: _onDaySelected,
-            calendarStyle: const CalendarStyle(
+            calendarStyle: CalendarStyle(
               todayDecoration: BoxDecoration(
                 color: Colors.orangeAccent,
                 shape: BoxShape.circle,
@@ -63,56 +77,60 @@ class _FullCalendarScreenState extends State<FullCalendarScreen> {
                 color: Colors.green,
                 shape: BoxShape.circle,
               ),
+              todayTextStyle: TextStyle(fontSize: fontSizeSubtitle),
+              defaultTextStyle: TextStyle(fontSize: fontSizeSubtitle),
             ),
-            headerStyle: const HeaderStyle(
+            headerStyle: HeaderStyle(
               formatButtonVisible: false,
               titleCentered: true,
+              titleTextStyle: TextStyle(fontSize: fontSizeTitle, fontWeight: FontWeight.bold),
             ),
           ),
-          const SizedBox(height: 8.0),
+          SizedBox(height: verticalPadding),
           Expanded(
             child: ValueListenableBuilder<List<Activity>>(
               valueListenable: _selectedEvents,
               builder: (context, value, _) {
                 if (value.isEmpty) {
-                  return const Center(child: Text('No activities on this day.'));
+                  return Center(child: Text(_tr('diary_no_activities'), style: TextStyle(fontSize: fontSizeSubtitle)));
                 }
                 return ListView.builder(
                   itemCount: value.length,
                   itemBuilder: (context, index) {
                     final activity = value[index];
                     return Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
-                      padding: const EdgeInsets.all(12.0),
+                      margin: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
+                      padding: EdgeInsets.all(horizontalPadding),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey.shade300),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: ExpansionTile(
-                        leading: Icon(activity.icon, color: Colors.green),
-                        title: Text(activity.title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Text(DateFormat.yMMMd().format(activity.scheduledDate)),
+                        leading: Icon(activity.icon, color: Colors.green, size: iconSize),
+                        title: Text(activity.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSizeTitle)),
+                        subtitle: Text(DateFormat.yMMMd().format(activity.scheduledDate), style: TextStyle(fontSize: fontSizeSubtitle)),
                         children: [
                           if (activity.steps.isNotEmpty)
                             Padding(
-                              padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0, bottom: 8.0),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: verticalPadding, horizontal: horizontalPadding),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text('Steps:', style: TextStyle(fontWeight: FontWeight.bold)),
-                                  const SizedBox(height: 4),
+                                  Text(_tr('diary_steps'), style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSizeSubtitle)),
+                                  SizedBox(height: verticalPadding / 2),
                                   ...activity.steps.map((step) => Padding(
-                                    padding: const EdgeInsets.only(bottom: 4.0),
-                                    child: Text(step, style: TextStyle(color: Colors.grey[700])),
-                                  )).toList(),
+                                    padding: EdgeInsets.only(bottom: verticalPadding / 2),
+                                    child: Text(step, style: TextStyle(color: Colors.grey[700], fontSize: fontSizeSubtitle)),
+                                  )),
                                 ],
                               ),
                             )
                           else
-                            const Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: Text('No specific steps provided for this task.'),
-                            )
+                            Padding(
+                              padding: EdgeInsets.all(horizontalPadding),
+                              child: Text(_tr('diary_no_specific_steps'), style: TextStyle(fontSize: fontSizeSubtitle)),
+                            ),
                         ],
                       ),
                     );

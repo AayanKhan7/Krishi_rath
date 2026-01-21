@@ -8,20 +8,27 @@ class SchemesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tr = localizationService.translate;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // Dynamic paddings and font sizes
+    final horizontalPadding = screenWidth * 0.04;
+    final verticalSpacing = screenHeight * 0.02;
+    final subtitleFontSize = screenWidth * 0.045;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(tr('schemes_title')),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalSpacing),
         children: [
           Text(
             tr('schemes_subtitle'),
-            style: const TextStyle(fontSize: 16),
+            style: TextStyle(fontSize: subtitleFontSize),
           ),
-          const SizedBox(height: 16),
-          // In a real app, this data would come from an API
+          SizedBox(height: verticalSpacing),
+          // Scheme cards
           const SchemeCard(
             titleKey: 'schemes_pm_kisan_title',
             descriptionKey: 'schemes_pm_kisan_desc',
@@ -31,6 +38,7 @@ class SchemesScreen extends StatelessWidget {
             helpline: '155261',
             tagKey: 'priority_high',
           ),
+          SizedBox(height: verticalSpacing),
           const SchemeCard(
             titleKey: 'schemes_crop_insurance_title',
             descriptionKey: 'schemes_crop_insurance_desc',
@@ -45,4 +53,3 @@ class SchemesScreen extends StatelessWidget {
     );
   }
 }
-

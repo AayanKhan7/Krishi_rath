@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:krishi_rath/common/widgets/bilingual_text.dart';
 import 'package:krishi_rath/services/localization_service.dart';
 
 class MarketPriceCard extends StatelessWidget {
   final String cropName;
   final String hindiCropName;
+  final String marathiCropName;
   final String price;
   final double percentageChange;
   final String marketInfo;
@@ -14,61 +14,85 @@ class MarketPriceCard extends StatelessWidget {
     super.key,
     required this.cropName,
     required this.hindiCropName,
+    required this.marathiCropName,
     required this.price,
     required this.percentageChange,
     required this.marketInfo,
     required this.cropIcon,
   });
 
+  String _tr(String key) => localizationService.translate(key);
+
+  String _getLocalizedCropName() {
+    final currentLocale = localizationService.locale.languageCode;
+    if (currentLocale == 'hi') return hindiCropName;
+    if (currentLocale == 'mr') return marathiCropName;
+    return cropName;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final tr = localizationService.translate;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    final double padding = screenWidth * 0.04;
+    final double iconSize = screenWidth * 0.08;
+    final double titleFontSize = screenWidth * 0.045;
+    final double subtitleFontSize = screenWidth * 0.035;
+    final double priceFontSize = screenWidth * 0.05;
+    final double buttonFontSize = screenWidth * 0.035;
+    final double spacing = screenHeight * 0.008;
+
     final isPositive = percentageChange >= 0;
     final changeColor = isPositive ? Colors.green : Colors.red;
 
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      margin: EdgeInsets.symmetric(vertical: spacing),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(padding),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CircleAvatar(
+              radius: iconSize,
               backgroundColor: Colors.grey[200],
-              child: Icon(cropIcon, color: Colors.black54),
+              child: Icon(cropIcon, color: Colors.black54, size: iconSize),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: padding),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  BilingualText(
-                    englishText: cropName,
-                    hindiText: hindiCropName,
-                    englishStyle:
-                        const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  Text(
+                    _getLocalizedCropName(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: titleFontSize,
+                    ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: spacing),
                   Row(
                     children: [
                       Icon(
-                        isPositive
-                            ? Icons.arrow_upward
-                            : Icons.arrow_downward,
+                        isPositive ? Icons.arrow_upward : Icons.arrow_downward,
                         color: changeColor,
-                        size: 16,
+                        size: iconSize * 0.6,
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: spacing / 2),
                       Text(
-                        '${percentageChange.abs()}% ${tr('market_prices_vs_yesterday')}',
+                        '${percentageChange.abs()}% ${_tr('market_prices_vs_yesterday')}',
                         style: TextStyle(
-                            color: changeColor, fontWeight: FontWeight.bold),
+                          color: changeColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: subtitleFontSize,
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: spacing / 2),
                   Text(
                     marketInfo,
-                    style: const TextStyle(color: Colors.grey, fontSize: 12),
+                    style: TextStyle(color: Colors.grey, fontSize: subtitleFontSize),
                   ),
                 ],
               ),
@@ -78,17 +102,22 @@ class MarketPriceCard extends StatelessWidget {
               children: [
                 Text(
                   '₹$price',
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: priceFontSize,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text(
-                  tr('market_prices_per_quintal'),
-                  style: const TextStyle(color: Colors.grey),
+                  _tr('market_prices_per_quintal'),
+                  style: TextStyle(color: Colors.grey, fontSize: subtitleFontSize),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: spacing),
                 TextButton(
-                  onPressed: () => _showPredictionDialog(context, cropName, price),
-                  child: const Text('1-Month Forecast'),
+                  onPressed: () => _showPredictionDialog(context, _getLocalizedCropName(), price),
+                  child: Text(
+                    _tr('market_forecast_button'),
+                    style: TextStyle(fontSize: buttonFontSize),
+                  ),
                 ),
               ],
             ),
@@ -99,9 +128,7 @@ class MarketPriceCard extends StatelessWidget {
   }
 
   void _showPredictionDialog(BuildContext context, String cropName, String currentPrice) {
-    // Dummy predicted price calculation
     final currentPriceDouble = double.tryParse(currentPrice) ?? 0.0;
-    // Simulate a 5% price increase for demonstration
     final predictedPriceValue = currentPriceDouble * 1.05;
     final priceChange = predictedPriceValue - currentPriceDouble;
     final isPredictedPositive = priceChange >= 0;
@@ -109,39 +136,40 @@ class MarketPriceCard extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        final screenWidth = MediaQuery.of(context).size.width;
+        final chartHeight = screenWidth * 0.4;
+
         return AlertDialog(
-          title: Text('Forecast for $cropName'),
+          title: Text(_tr('market_prediction_title').replaceFirst('{crop}', cropName)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 150,
+                height: chartHeight,
                 width: double.infinity,
                 child: _PricePredictionChart(isPositive: isPredictedPositive),
               ),
-              const SizedBox(height: 20),
-              const Text(
-                'Predicted Price (30 days):',
-                style: TextStyle(fontSize: 14, color: Colors.grey),
+              SizedBox(height: screenWidth * 0.04),
+              Text(
+                _tr('market_predicted_price'),
+                style: TextStyle(fontSize: screenWidth * 0.035, color: Colors.grey),
               ),
               Text(
                 '₹${predictedPriceValue.toStringAsFixed(2)}',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenWidth * 0.05),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: screenWidth * 0.02),
               Text(
-                'This is a sample AI prediction. Market conditions may vary.',
-                 style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                _tr('market_prediction_note'),
+                style: TextStyle(fontSize: screenWidth * 0.03, color: Colors.grey[600]),
               ),
             ],
           ),
-          actions: <Widget>[
+          actions: [
             TextButton(
-              child: const Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              child: Text(_tr('market_close')),
+              onPressed: () => Navigator.of(context).pop(),
             ),
           ],
         );
@@ -185,8 +213,7 @@ class _LineChartPainter extends CustomPainter {
 
     final path = Path();
 
-    if(isPositive) {
-      // Dummy path representing an upward trend.
+    if (isPositive) {
       path.moveTo(0, size.height * 0.8);
       path.cubicTo(
         size.width * 0.25, size.height * 0.7,
@@ -194,31 +221,24 @@ class _LineChartPainter extends CustomPainter {
         size.width, size.height * 0.1,
       );
     } else {
-      // Dummy path representing a downward trend.
       path.moveTo(0, size.height * 0.2);
-       path.cubicTo(
+      path.cubicTo(
         size.width * 0.25, size.height * 0.3,
         size.width * 0.5, size.height * 0.6,
         size.width, size.height * 0.9,
       );
     }
 
-
     canvas.drawPath(path, paint);
 
-    // Draw axes for context
     final axisPaint = Paint()
       ..color = Colors.grey.shade400
       ..strokeWidth = 1;
 
-    // Y-axis
     canvas.drawLine(const Offset(0, 0), Offset(0, size.height), axisPaint);
-    // X-axis
     canvas.drawLine(Offset(0, size.height), Offset(size.width, size.height), axisPaint);
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-  }
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

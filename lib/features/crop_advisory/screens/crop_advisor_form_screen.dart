@@ -1,5 +1,6 @@
+// crop_advisor_form_screen.dart
 import 'package:flutter/material.dart';
-import 'package:krishi_rath/common/widgets/bilingual_text.dart';
+//import 'package:krishi_rath/common/widgets/bilingual_text.dart';
 import 'package:krishi_rath/features/crop_advisory/screens/personalized_plan_screen.dart';
 import 'package:krishi_rath/services/localization_service.dart';
 
@@ -13,60 +14,45 @@ class CropAdvisorFormScreen extends StatefulWidget {
 class _CropAdvisorFormScreenState extends State<CropAdvisorFormScreen> {
   final _formKey = GlobalKey<FormState>();
   final _areaController = TextEditingController();
-  final _soilTypeController = TextEditingController();
+  String? _selectedSoilType;
   String? _selectedIrrigation;
   bool _isRecommendationGenerated = false;
 
-  // Get translation function
   String _tr(String key) => localizationService.translate(key);
 
-  // Validation methods
+  final List<Map<String, dynamic>> soilTypes = [
+    {'key': 'soil_loamy', 'name': 'Loamy Soil', 'image': 'assets/soils/loamy_soil.jpg'},
+    {'key': 'soil_sandy', 'name': 'Sandy Soil', 'image': 'assets/soils/sandy_soil.jpg'},
+    {'key': 'soil_clay', 'name': 'Clay Soil', 'image': 'assets/soils/clay_soil.jpg'},
+    {'key': 'soil_silty', 'name': 'Silty Soil', 'image': 'assets/soils/silty_soil.jpg'},
+    {'key': 'soil_peaty', 'name': 'Peaty Soil', 'image': 'assets/soils/peaty_soil.jpg'},
+    {'key': 'soil_chalky', 'name': 'Chalky Soil', 'image': 'assets/soils/chalky_soil.jpg'},
+  ];
+
   String? _validateArea(String? value) {
-    if (value == null || value.isEmpty) {
-      return _tr('validation_land_area_required');
-    }
+    if (value == null || value.isEmpty) return _tr('validation_land_area_required');
     final number = double.tryParse(value);
-    if (number == null) {
-      return _tr('validation_land_area_number');
-    }
-    if (number <= 0) {
-      return _tr('validation_land_area_positive');
-    }
+    if (number == null) return _tr('validation_land_area_number');
+    if (number <= 0) return _tr('validation_land_area_positive');
     return null;
   }
 
   String? _validateSoilType(String? value) {
-    if (value == null || value.isEmpty) {
-      return _tr('validation_soil_type_required');
-    }
-    if (value.length < 2) {
-      return _tr('validation_soil_type_valid');
-    }
+    if (value == null || value.isEmpty) return _tr('validation_soil_type_required');
     return null;
   }
 
   String? _validateIrrigation(String? value) {
-    if (value == null || value.isEmpty) {
-      return _tr('validation_irrigation_required');
-    }
+    if (value == null || value.isEmpty) return _tr('validation_irrigation_required');
     return null;
   }
 
   void _getRecommendation() {
     if (_formKey.currentState!.validate()) {
-      // Hide keyboard
       FocusScope.of(context).unfocus();
-
-      setState(() {
-        _isRecommendationGenerated = true;
-      });
-
-      // Show success message
+      setState(() => _isRecommendationGenerated = true);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(_tr('recommendation_success')),
-          backgroundColor: Colors.green,
-        ),
+        SnackBar(content: Text(_tr('recommendation_success')), backgroundColor: Colors.green),
       );
     }
   }
@@ -78,7 +64,7 @@ class _CropAdvisorFormScreenState extends State<CropAdvisorFormScreen> {
         MaterialPageRoute(
           builder: (context) => PersonalizedPlanScreen(
             landArea: _areaController.text,
-            soilType: _soilTypeController.text,
+            soilType: _selectedSoilType ?? _tr('not_selected'),
             irrigationType: _selectedIrrigation ?? _tr('not_selected'),
           ),
         ),
@@ -89,17 +75,14 @@ class _CropAdvisorFormScreenState extends State<CropAdvisorFormScreen> {
   void _resetForm() {
     _formKey.currentState?.reset();
     _areaController.clear();
-    _soilTypeController.clear();
+    _selectedSoilType = null;
     _selectedIrrigation = null;
-    setState(() {
-      _isRecommendationGenerated = false;
-    });
+    setState(() => _isRecommendationGenerated = false);
   }
 
   @override
   void dispose() {
     _areaController.dispose();
-    _soilTypeController.dispose();
     super.dispose();
   }
 
@@ -136,24 +119,9 @@ class _CropAdvisorFormScreenState extends State<CropAdvisorFormScreen> {
                 keyboardType: TextInputType.number,
               ),
               const SizedBox(height: 20),
-              _buildTextField(
-                label: _tr('crop_advisor_form_soil_type'),
-                hint: _tr('crop_advisor_form_hint_soil'),
-                controller: _soilTypeController,
-                validator: _validateSoilType,
-              ),
+              _buildSoilTypeDropdown(),
               const SizedBox(height: 20),
-              _buildDropdownField(
-                label: _tr('crop_advisor_form_irrigation_type'),
-                hint: _tr('crop_advisor_form_hint_irrigation'),
-                value: _selectedIrrigation,
-                validator: _validateIrrigation,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedIrrigation = newValue;
-                  });
-                },
-              ),
+              _buildIrrigationDropdown(),
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: _getRecommendation,
@@ -168,20 +136,13 @@ class _CropAdvisorFormScreenState extends State<CropAdvisorFormScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-
-              // Reset button
               if (_isRecommendationGenerated)
                 OutlinedButton(
                   onPressed: _resetForm,
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
+                  style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
                   child: Text(_tr('reset_form_button')),
                 ),
-
               const SizedBox(height: 16),
-
-              // Get Plan button - only appears after recommendation
               if (_isRecommendationGenerated)
                 ElevatedButton(
                   onPressed: _navigateToPlan,
@@ -195,8 +156,6 @@ class _CropAdvisorFormScreenState extends State<CropAdvisorFormScreen> {
                     style: const TextStyle(color: Colors.white),
                   ),
                 ),
-
-              // Form data preview (for debugging/confirmation)
               if (_isRecommendationGenerated) ...[
                 const SizedBox(height: 24),
                 Card(
@@ -215,7 +174,7 @@ class _CropAdvisorFormScreenState extends State<CropAdvisorFormScreen> {
                         ),
                         const SizedBox(height: 8),
                         Text('${_tr('crop_advisor_form_land_area')}: ${_areaController.text} ${_tr('acres_unit')}'),
-                        Text('${_tr('crop_advisor_form_soil_type')}: ${_soilTypeController.text}'),
+                        Text('${_tr('crop_advisor_form_soil_type')}: ${_getSelectedSoilName()}'),
                         Text('${_tr('crop_advisor_form_irrigation_type')}: ${_selectedIrrigation ?? _tr('not_selected')}'),
                       ],
                     ),
@@ -239,20 +198,14 @@ class _CropAdvisorFormScreenState extends State<CropAdvisorFormScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(fontWeight: FontWeight.w600),
-        ),
+        Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
           decoration: InputDecoration(
             hintText: hint,
             border: const OutlineInputBorder(),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 14,
-            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           ),
           keyboardType: keyboardType,
           textInputAction: TextInputAction.next,
@@ -262,50 +215,92 @@ class _CropAdvisorFormScreenState extends State<CropAdvisorFormScreen> {
     );
   }
 
-  Widget _buildDropdownField({
-    required String label,
-    required String hint,
-    required String? value,
-    required String? Function(String?) validator,
-    required Function(String?) onChanged,
-  }) {
-    // Get translated irrigation methods
+  Widget _buildSoilTypeDropdown() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(_tr('crop_advisor_form_soil_type'), style: const TextStyle(fontWeight: FontWeight.w600)),
+        const SizedBox(height: 8),
+        DropdownButtonFormField<String>(
+          initialValue: _selectedSoilType,
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          ),
+          hint: Text(_tr('crop_advisor_form_hint_soil')),
+          items: soilTypes.map((soil) {
+            return DropdownMenuItem<String>(
+              value: soil['key'],
+              child: Row(
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      image: DecorationImage(
+                        image: AssetImage(soil['image']),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(_tr(soil['key'])),
+                ],
+              ),
+            );
+          }).toList(),
+          onChanged: (String? newValue) {
+            setState(() => _selectedSoilType = newValue);
+          },
+          validator: _validateSoilType,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildIrrigationDropdown() {
     final irrigationMethods = [
       _tr('irrigation_drip'),
       _tr('irrigation_sprinkler'),
       _tr('irrigation_canal'),
-      'Flood Irrigation',
-      'Rainfed'
+      _tr('irrigation_flood'),
+      _tr('irrigation_rainfed')
     ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(fontWeight: FontWeight.w600),
-        ),
+        Text(_tr('crop_advisor_form_irrigation_type'), style: const TextStyle(fontWeight: FontWeight.w600)),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
-          value: value,
+          initialValue: _selectedIrrigation,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 14,
-            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           ),
-          hint: Text(hint),
-          items: irrigationMethods.map((String method) {
+          hint: Text(_tr('crop_advisor_form_hint_irrigation')),
+          items: irrigationMethods.map((method) {
             return DropdownMenuItem<String>(
               value: method,
               child: Text(method),
             );
           }).toList(),
-          onChanged: onChanged,
-          validator: validator,
+          onChanged: (String? newValue) {
+            setState(() => _selectedIrrigation = newValue);
+          },
+          validator: _validateIrrigation,
         ),
       ],
     );
+  }
+
+  String _getSelectedSoilName() {
+    if (_selectedSoilType == null) return _tr('not_selected');
+    final soil = soilTypes.firstWhere(
+          (s) => s['key'] == _selectedSoilType,
+      orElse: () => {'key': '', 'name': _tr('not_selected')},
+    );
+    return _tr(soil['key']);
   }
 }

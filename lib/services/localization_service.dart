@@ -55,24 +55,21 @@ class LocalizationService extends ChangeNotifier {
       'priority_low': 'Low',
 
       // Diary Screen
-      'diary_title': 'Crop Diary',
-      'diary_log_activity': "Log Today's Activity",
-      'diary_voice_input': 'Voice Input',
-      'diary_upcoming_tasks': 'Upcoming Tasks',
-      'diary_recent_activities': 'Recent Activities',
-      'diary_task_fertilizer': 'Apply fertilizer to wheat',
-      'diary_task_pests': 'Check tomato plants for pests',
-      'diary_task_harvest': 'Harvest ready cotton',
-      'diary_activity_watered_title': 'Watered the wheat field',
-      'diary_activity_watered_crop': 'Wheat',
-      'diary_activity_watered_desc':
-      'Applied water for 2 hours using drip irrigation.',
-      'diary_activity_watered_weather': 'Sunny, 28°C',
-      'diary_activity_applied_npk_title': 'Applied NPK fertilizer',
-      'diary_activity_applied_npk_crop': 'Tomato',
-      'diary_activity_applied_npk_desc':
-      'Applied 50kg NPK (12:32:16) per acre as recommended.',
-      'diary_activity_applied_npk_weather': 'Cloudy, 26°C',
+      'diary_my_crop_plans': 'My Crop Plans',
+      'diary_day_of_plan': 'Day {days} of plan',
+      'diary_progress': 'Progress',
+      'diary_view_full_calendar': 'View Full Calendar →',
+      'diary_no_tasks_today': 'No tasks scheduled for today. Relax!',
+      'diary_no_activities': 'No activities on this day.',
+      'diary_no_specific_steps': 'No specific steps provided for this task.',
+      'diary_steps': 'Steps:',
+      'diary_add_details': 'Add Details',
+      'diary_view_edit_details': 'View/Edit Details',
+      'diary_details_for': 'Details for: {activity}',
+      'diary_expenses': 'Expenses (e.g., 500)',
+      'diary_add_notes': 'Add Notes',
+      'diary_save_details': 'Save Details',
+      'diary_no_plans': 'No crop plans found.',
 
       // Profile Screen
       'profile_title': 'Profile',
@@ -132,6 +129,16 @@ class LocalizationService extends ChangeNotifier {
       'market_prices_live': 'Live',
       'market_prices_per_quintal': 'per quintal',
       'market_prices_vs_yesterday': 'vs yesterday',
+      'market_search_hint': 'Search by Crop or Mandi...',
+      'market_all_markets': 'All Markets',
+      'market_mandi': 'Mandi',
+      'market_market_yard': 'Market Yard',
+      'market_bazaar': 'Bazaar',
+      'market_forecast_button': '1-Month Forecast',
+      'market_prediction_title': 'Forecast for {crop}',
+      'market_predicted_price': 'Predicted Price (30 days):',
+      'market_prediction_note': 'This is a sample AI prediction. Market conditions may vary.',
+      'market_close': 'Close',
 
       // Community Forum
       'community_title': 'Community Forum',
@@ -199,8 +206,63 @@ class LocalizationService extends ChangeNotifier {
       'plan_task_spacing': 'Maintain a row-to-row spacing of 30 cm.',
       'plan_task_npk1': 'Apply first dose of NPK fertilizer after 25 days.',
       'plan_task_npk2': 'Second dose should be applied at the flowering stage.',
+
+      // Add to all three language maps
+      'location_permission_title': 'Location Access',
+      'location_permission_message': 'Krishi Rath needs access to your location to show local weather information and provide accurate farming recommendations.',
+      'location_permission_allow': 'Allow',
+      'location_permission_deny': 'Deny',
+      'weather_title': 'Weather',
+      'weather_loading': 'Loading weather data...',
+      'weather_refresh': 'Refresh weather',
+      'weather_humidity': 'Humidity',
+      'weather_wind': 'Wind Speed',
+      'weather_using_default_location': 'Using default location',
+
+      // Add these keys to your English localization file
+      'home_chatbot': 'AI Assistant',
+      'home_weather': 'Weather',
+      'feature_coming_soon': 'Feature coming soon!',
+
+// Chatbot translations
+      'chatbot_title': 'Krishi Rath AI Assistant',
+      'chatbot_welcome_message': 'Hello! I\'m your farming assistant. Ask me about crops, weather, diseases, prices, or upload images for analysis.',
+      'chatbot_type_message': 'Type your question...',
+      'chatbot_send_message': 'Send message',
+      'chatbot_upload_image': 'Upload image',
+      'chatbot_voice_input': 'Voice input',
+      'chatbot_voice_coming_soon': 'Voice input coming soon!',
+      'chatbot_image_uploaded': 'Image uploaded for analysis',
+      'chatbot_image_analysis': 'Analyzing uploaded image',
+
+// Bot responses
+      'chatbot_response_greeting': 'Hello! How can I help with your farming today?',
+      'chatbot_response_weather': 'For accurate weather information, check the weather card on the home screen. For Nashik region, expect moderate temperatures with possible rainfall.',
+      'chatbot_response_crop': 'Based on your soil type and season, I recommend crops like wheat, rice, or vegetables. Visit Crop Advisory for personalized recommendations.',
+      'chatbot_response_disease': 'For pest and disease detection, use the Pest Detection feature to scan plant images. Common issues include fungal infections and insect damage.',
+      'chatbot_response_price': 'Check Market Prices for current rates. Wheat is trading at ₹2,100-2,300 per quintal in Nashik market.',
+      'chatbot_response_soil': 'Loamy soil is best for most crops. Get soil testing done and use organic manure for better yield.',
+      'chatbot_response_fertilizer': 'Use balanced NPK fertilizers. For wheat: 120:60:40 kg/ha of N:P:K. Always test soil before application.',
+      'chatbot_response_irrigation': 'Drip irrigation saves 30-50% water. Water requirements vary by crop stage and season.',
+      'chatbot_response_default': 'I understand you\'re asking about farming. For detailed assistance, try our specialized features: Crop Advisory, Pest Detection, or Market Prices.',
+
+      'chatbot_error_response': 'Sorry, I encountered an error. Please try again.',
+      'chatbot_image_error': 'Sorry, I could not analyze the image. Please try again.',
+
+
+// English
+      'ok_button': 'OK',
+      'chatbot_info_content': 'This AI assistant uses Google Gemini to provide farming advice. You can ask questions about crops, weather, diseases, prices, or upload images for analysis.',
+
+
+
     },
     'hi': {
+
+      // Hindi
+      'chatbot_error_response': 'क्षमा करें, मुझे एक त्रुटि का सामना करना पड़ा। कृपया पुनः प्रयास करें।',
+      'chatbot_image_error': 'क्षमा करें, मैं छवि का विश्लेषण नहीं कर सका। कृपया पुनः प्रयास करें।',
+
       // Home Screen
       'welcome_title': 'स्वागत है, राज कुमार',
       'home_active_plots': 'सक्रिय प्लॉट',
@@ -245,25 +307,22 @@ class LocalizationService extends ChangeNotifier {
       'priority_medium': 'मध्यम',
       'priority_low': 'कम',
 
-      // Diary Screen
-      'diary_title': 'फसल डायरी',
-      'diary_log_activity': 'आज की गतिविधि लॉग करें',
-      'diary_voice_input': 'आवाज इनपुट',
-      'diary_upcoming_tasks': 'आगामी कार्य',
-      'diary_recent_activities': 'हाल की गतिविधियाँ',
-      'diary_task_fertilizer': 'गेहूं में उर्वरक डालें',
-      'diary_task_pests': 'टमाटर के पौधों में कीटों की जांच करें',
-      'diary_task_harvest': 'कपास की कटाई के लिए तैयार',
-      'diary_activity_watered_title': 'गेहूं के खेत में पानी दिया',
-      'diary_activity_watered_crop': 'गेहूं',
-      'diary_activity_watered_desc':
-      'ड्रिप सिंचाई का उपयोग करके 2 घंटे तक पानी दिया।',
-      'diary_activity_watered_weather': 'धूप, 28°C',
-      'diary_activity_applied_npk_title': 'एनपीके उर्वरक डाला',
-      'diary_activity_applied_npk_crop': 'टमाटर',
-      'diary_activity_applied_npk_desc':
-      'सिफारिश के अनुसार प्रति एकड़ 50 किलो एनपीके (12:32:16) डाला।',
-      'diary_activity_applied_npk_weather': 'बादल छाए रहेंगे, 26°C',
+      //dairy screen
+      'diary_my_crop_plans': 'मेरी फसल योजनाएं',
+      'diary_day_of_plan': 'योजना का दिन {days}',
+      'diary_progress': 'प्रगति',
+      'diary_view_full_calendar': 'पूरा कैलेंडर देखें →',
+      'diary_no_tasks_today': 'आज के लिए कोई कार्य निर्धारित नहीं है। आराम करें!',
+      'diary_no_activities': 'इस दिन कोई गतिविधि नहीं है।',
+      'diary_no_specific_steps': 'इस कार्य के लिए कोई विशेष चरण प्रदान नहीं किए गए हैं।',
+      'diary_steps': 'चरण:',
+      'diary_add_details': 'विवरण जोड़ें',
+      'diary_view_edit_details': 'विवरण देखें/संपादित करें',
+      'diary_details_for': 'के लिए विवरण: {activity}',
+      'diary_expenses': 'खर्च (उदा., 500)',
+      'diary_add_notes': 'नोट्स जोड़ें',
+      'diary_save_details': 'विवरण सहेजें',
+      'diary_no_plans': 'कोई फसल योजना नहीं मिली।',
 
       // Profile Screen
       'profile_title': 'प्रोफ़ाइल',
@@ -323,6 +382,16 @@ class LocalizationService extends ChangeNotifier {
       'market_prices_live': 'लाइव',
       'market_prices_per_quintal': 'प्रति क्विंटल',
       'market_prices_vs_yesterday': 'कल की तुलना में',
+      'market_search_hint': 'फसल या मंडी से खोजें...',
+      'market_all_markets': 'सभी बाजार',
+      'market_mandi': 'मंडी',
+      'market_market_yard': 'मार्केट यार्ड',
+      'market_bazaar': 'बाजार',
+      'market_forecast_button': '1-महीने का पूर्वानुमान',
+      'market_prediction_title': '{crop} के लिए पूर्वानुमान',
+      'market_predicted_price': 'अनुमानित मूल्य (30 दिन):',
+      'market_prediction_note': 'यह एक नमूना एआई पूर्वानुमान है। बाजार की स्थितियां बदल सकती हैं।',
+      'market_close': 'बंद करें',
 
       // Community Forum
       'community_title': 'किसान समुदाय',
@@ -390,8 +459,57 @@ class LocalizationService extends ChangeNotifier {
       'plan_task_spacing': 'पंक्ति से पंक्ति की दूरी 30 सेमी बनाए रखें।',
       'plan_task_npk1': '25 दिनों के बाद एनपीके उर्वरक की पहली खुराक डालें।',
       'plan_task_npk2': 'दूसरी खुराक फूल आने की अवस्था में दी जानी चाहिए।',
+
+      'location_permission_title': 'स्थान का उपयोग',
+      'location_permission_message': 'कृषि रथ को आपके स्थान तक पहुंच की आवश्यकता है ताकि स्थानीय मौसम की जानकारी दिखाई जा सके और सटीक खेती की सिफारिशें प्रदान की जा सकें।',
+      'location_permission_allow': 'अनुमति दें',
+      'location_permission_deny': 'अस्वीकार करें',
+      'weather_title': 'मौसम',
+      'weather_loading': 'मौसम डेटा लोड हो रहा है...',
+      'weather_refresh': 'मौसम ताज़ा करें',
+      'weather_humidity': 'नमी',
+      'weather_wind': 'हवा की गति',
+      'weather_using_default_location': 'डिफ़ॉल्ट स्थान का उपयोग कर रहे हैं',
+
+      'home_chatbot': 'एआई सहायक',
+      'home_weather': 'मौसम',
+      'feature_coming_soon': 'जल्द ही आ रहा है!',
+
+// Chatbot translations
+      'chatbot_title': 'कृषि रथ एआई सहायक',
+      'chatbot_welcome_message': 'नमस्ते! मैं आपका कृषि सहायक हूं। मुझसे फसलों, मौसम, बीमारियों, कीमतों के बारे में पूछें या विश्लेषण के लिए छवियां अपलोड करें।',
+      'chatbot_type_message': 'अपना प्रश्न टाइप करें...',
+      'chatbot_send_message': 'संदेश भेजें',
+      'chatbot_upload_image': 'छवि अपलोड करें',
+      'chatbot_voice_input': 'आवाज इनपुट',
+      'chatbot_voice_coming_soon': 'आवाज इनपुट जल्द ही आ रहा है!',
+      'chatbot_image_uploaded': 'विश्लेषण के लिए छवि अपलोड की गई',
+      'chatbot_image_analysis': 'अपलोड की गई छवि का विश्लेषण कर रहा हूं',
+
+// Bot responses
+      'chatbot_response_greeting': 'नमस्ते! आज मैं आपकी खेती में कैसे मदद कर सकता हूं?',
+      'chatbot_response_weather': 'सटीक मौसम की जानकारी के लिए होम स्क्रीन पर वेदर कार्ड देखें। नासिक क्षेत्र के लिए, संभावित बारिश के साथ मध्यम तापमान की उम्मीद है।',
+      'chatbot_response_crop': 'आपकी मिट्टी के प्रकार और मौसम के आधार पर, मैं गेहूं, चावल या सब्जियों जैसी फसलों की सलाह देता हूं। व्यक्तिगत सिफारिशों के लिए क्रॉप एडवाइजरी पर जाएं।',
+      'chatbot_response_disease': 'कीट और बीमारी का पता लगाने के लिए, पौधों की छवियों को स्कैन करने के लिए पेस्ट डिटेक्शन फीचर का उपयोग करें। आम समस्याओं में फंगल संक्रमण और कीट क्षति शामिल हैं।',
+      'chatbot_response_price': 'वर्तमान दरों के लिए मार्केट प्राइस देखें। नासिक बाजार में गेहूं ₹2,100-2,300 प्रति क्विंटल पर कारोबार कर रहा है।',
+      'chatbot_response_soil': 'ज्यादातर फसलों के लिए दोमट मिट्टी सबसे अच्छी होती है। बेहतर उपज के लिए मिट्टी की जांच कराएं और जैविक खाद का उपयोग करें।',
+      'chatbot_response_fertilizer': 'संतुलित एनपीके उर्वरकों का उपयोग करें। गेहूं के लिए: एन:पी:के 120:60:40 किग्रा/हेक्टेयर। आवेदन से पहले हमेशा मिट्टी की जांच करें।',
+      'chatbot_response_irrigation': 'ड्रिप सिंचाई 30-50% पानी बचाती है। पानी की आवश्यकताएं फसल के चरण और मौसम के अनुसार अलग-अलग होती हैं।',
+      'chatbot_response_default': 'मैं समझता हूं कि आप खेती के बारे में पूछ रहे हैं। विस्तृत सहायता के लिए, हमारे विशेष सुविधाओं का प्रयोग करें: क्रॉप एडवाइजरी, पेस्ट डिटेक्शन, या मार्केट प्राइस।',
+
+      // Hindi
+      'ok_button': 'ठीक है',
+      'chatbot_info_content': 'यह एआई सहायक कृषि सलाह प्रदान करने के लिए Google Gemini का उपयोग करता है। आप फसलों, मौसम, बीमारियों, कीमतों के बारे में प्रश्न पूछ सकते हैं या विश्लेषण के लिए छवियां अपलोड कर सकते हैं।',
     },
     'mr': {
+// Marathi
+      'ok_button': 'ठीक',
+      'chatbot_info_content': 'हे कृत्रिम बुद्धिमत्ता सहाय्यक शेती सल्ला देण्यासाठी Google Gemini वापरते. आपण पिके, हवामान, रोग, किंमती याबद्दल प्रश्न विचारू शकता किंवा विश्लेषणासाठी प्रतिमा अपलोड करू शकता.',
+
+      // Marathi
+      'chatbot_error_response': 'माफ करा, मला एक त्रुटी आली. कृपया पुन्हा प्रयत्न करा.',
+      'chatbot_image_error': 'माफ करा, मी प्रतिमेचे विश्लेषण करू शकलो नाही. कृपया पुन्हा प्रयत्न करा.',
+
       // Home Screen
       'welcome_title': 'स्वागत आहे, राज कुमार',
       'home_active_plots': 'सक्रिय भूखंड',
@@ -438,23 +556,21 @@ class LocalizationService extends ChangeNotifier {
       'priority_low': 'कमी',
 
       // Diary Screen
-      'diary_title': 'पीक डायरी',
-      'diary_log_activity': 'आजच्या कामाची नोंद करा',
-      'diary_voice_input': 'व्हॉइस इनपुट',
-      'diary_upcoming_tasks': 'आगामी कामे',
-      'diary_recent_activities': 'अलीकडील कामे',
-      'diary_task_fertilizer': 'गव्हाला खत द्या',
-      'diary_task_pests': 'टोमॅटोच्या रोपांची कीड तपासा',
-      'diary_task_harvest': 'कापूस काढणीसाठी तयार',
-      'diary_activity_watered_title': 'गव्हाच्या शेताला पाणी दिले',
-      'diary_activity_watered_crop': 'गहू',
-      'diary_activity_watered_desc': 'ठिबक सिंचनाचा वापर करून २ तास पाणी दिले.',
-      'diary_activity_watered_weather': 'निरभ्र, 28°C',
-      'diary_activity_applied_npk_title': 'NPK खत दिले',
-      'diary_activity_applied_npk_crop': 'टोमॅटो',
-      'diary_activity_applied_npk_desc':
-      'शिफारशीनुसार प्रति एकर 50 किलो एनपीके (12:32:16) दिले.',
-      'diary_activity_applied_npk_weather': 'ढगाळ, 26°C',
+      'diary_my_crop_plans': 'माझ्या पीक योजना',
+      'diary_day_of_plan': 'योजनेचा दिवस {days}',
+      'diary_progress': 'प्रगती',
+      'diary_view_full_calendar': 'संपूर्ण कॅलेंडर पहा →',
+      'diary_no_tasks_today': 'आजसाठी कोणतेही काम नियोजित नाही. आराम करा!',
+      'diary_no_activities': 'या दिवशी कोणतीही क्रिया नाही.',
+      'diary_no_specific_steps': 'या कामासाठी कोणतेही विशिष्ट चरण प्रदान केलेले नाहीत.',
+      'diary_steps': 'चरण:',
+      'diary_add_details': 'तपशील जोडा',
+      'diary_view_edit_details': 'तपशील पहा/संपादित करा',
+      'diary_details_for': 'साठी तपशील: {activity}',
+      'diary_expenses': 'खर्च (उदा., 500)',
+      'diary_add_notes': 'नोट्स जोडा',
+      'diary_save_details': 'तपशील जतन करा',
+      'diary_no_plans': 'कोणतीही पीक योजना सापडली नाही.',
 
       // Profile Screen
       'profile_title': 'प्रोफाइल',
@@ -513,6 +629,16 @@ class LocalizationService extends ChangeNotifier {
       'market_prices_live': 'थेट',
       'market_prices_per_quintal': 'प्रति क्विंटल',
       'market_prices_vs_yesterday': 'कालच्या तुलनेत',
+      'market_search_hint': 'पीक किंवा मंडी नुसार शोधा...',
+      'market_all_markets': 'सर्व बाजार',
+      'market_mandi': 'मंडी',
+      'market_market_yard': 'मार्केट यार्ड',
+      'market_bazaar': 'बाजार',
+      'market_forecast_button': '1-महिन्याचा अंदाज',
+      'market_prediction_title': '{crop} साठी अंदाज',
+      'market_predicted_price': 'अंदाजित किंमत (30 दिवस):',
+      'market_prediction_note': 'हा एक नमुना AI अंदाज आहे. बाजारातील परिस्थिती बदलू शकते.',
+      'market_close': 'बंद करा',
 
       // Community Forum
       'community_title': 'शेतकरी समुदाय',
@@ -580,6 +706,44 @@ class LocalizationService extends ChangeNotifier {
       'plan_task_spacing': 'दोन ओळींमध्ये ३० सें.मी. अंतर ठेवा.',
       'plan_task_npk1': '२५ दिवसांनी एनपीके खताचा पहिला डोस द्या.',
       'plan_task_npk2': 'दुसरा डोस फुलोऱ्याच्या अवस्थेत द्यावा.',
+
+
+      // Marathi translations
+      'location_permission_title': 'स्थान प्रवेश',
+      'location_permission_message': 'कृषी रथला स्थानिक हवामान माहिती दर्शविण्यासाठी आणि अचूक शेती शिफारसी प्रदान करण्यासाठी आपल्या स्थानावर प्रवेश आवश्यक आहे.',
+      'location_permission_allow': 'परवानगी द्या',
+      'location_permission_deny': 'नकार द्या',
+      'weather_title': 'हवामान',
+      'weather_loading': 'हवामान डेटा लोड होत आहे...',
+      'weather_refresh': 'हवामान रीफ्रेश करा',
+      'weather_humidity': 'आर्द्रता',
+      'weather_wind': 'वारा वेग',
+      'weather_using_default_location': 'डीफॉल्ट लोकेशन वापरत आहे',
+      'home_chatbot': 'कृत्रिम बुद्धिमत्ता सहाय्यक',
+      'home_weather': 'हवामान',
+      'feature_coming_soon': 'लवकरच येणार आहे!',
+
+// Chatbot translations
+      'chatbot_title': 'कृषी रथ कृत्रिम बुद्धिमत्ता सहाय्यक',
+      'chatbot_welcome_message': 'नमस्कार! मी तुमचा शेती सहाय्यक आहे. मला पिके, हवामान, रोग, किंमती याबद्दल विचारा किंवा विश्लेषणासाठी प्रतिमा अपलोड करा.',
+      'chatbot_type_message': 'तुमचा प्रश्न टाइप करा...',
+      'chatbot_send_message': 'संदेश पाठवा',
+      'chatbot_upload_image': 'प्रतिमा अपलोड करा',
+      'chatbot_voice_input': 'व्हॉइस इनपुट',
+      'chatbot_voice_coming_soon': 'व्हॉइस इनपुट लवकरच येणार आहे!',
+      'chatbot_image_uploaded': 'विश्लेषणासाठी प्रतिमा अपलोड केली',
+      'chatbot_image_analysis': 'अपलोड केलेल्या प्रतिमेचे विश्लेषण करत आहे',
+
+// Bot responses
+      'chatbot_response_greeting': 'नमस्कार! मी आज तुम्हाला तुमच्या शेतीत कशी मदत करू शकतो?',
+      'chatbot_response_weather': 'अचूक हवामान माहितीसाठी होम स्क्रीनवरील वेदर कार्ड तपासा. नाशिक प्रदेशासाठी, शक्यतेसह मध्यम तापमानाची अपेक्षा आहे.',
+      'chatbot_response_crop': 'तुमच्या मातीच्या प्रकार आणि हंगामावर आधारित, मी गहू, तांदूळ किंवा भाज्या यासारख्या पिकांची शिफारस करतो. वैयक्तिकृत शिफारसींसाठी क्रॉप अ‍ॅडवायझरी वर जा.',
+      'chatbot_response_disease': 'कीटक आणि रोग ओळखण्यासाठी, रोपांच्या प्रतिमा स्कॅन करण्यासाठी पेस्ट डिटेक्शन फीचर वापरा. बुरशीजन्य संसर्ग आणि कीटकांचे नुकसान यासारख्या सामान्य समस्या आहेत.',
+      'chatbot_response_price': 'चालू दरांसाठी मार्केट प्राइस तपासा. नाशिक मार्केटमध्ये गहू २,१००-२,३०० रुपये प्रति क्विंटल या दराने आहे.',
+      'chatbot_response_soil': 'बहुतेक पिकांसाठी चिकणमाती सर्वोत्तम असते. चांगल्या उत्पादनासाठी मातीची चाचणी करा आणि कंपोस्ट खत वापरा.',
+      'chatbot_response_fertilizer': 'संतुलित एनपीके खते वापरा. गव्हासाठी: एन:पी:के १२०:६०:४० किलो/हेक्टर. वापरापूर्वी नेहमी मातीची चाचणी करा.',
+      'chatbot_response_irrigation': 'ड्रिप सिंचनाने ३०-५०% पाणी वाचते. पाण्याची आवश्यकता पिकाच्या टप्प्यानुसार आणि हंगामानुसार बदलते.',
+      'chatbot_response_default': 'मला समजले आहे की आपण शेतीबद्दल विचारत आहात. तपशीलवार मदतीसाठी, आमची विशेष फीचर्स वापरा: क्रॉप अ‍ॅडवायझरी, पेस्ट डिटेक्शन, किंवा मार्केट प्राइस.',
     },
   };
 

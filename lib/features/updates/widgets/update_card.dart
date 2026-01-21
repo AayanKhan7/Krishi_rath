@@ -22,18 +22,26 @@ class UpdateCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tr = localizationService.translate;
-    // Construct the full sentence to be spoken from the translated parts
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    final horizontalPadding = screenWidth * 0.04;
+    final verticalPadding = screenHeight * 0.015;
+    final iconSize = screenWidth * 0.07; // scales with screen width
+    final titleFontSize = screenWidth * 0.045;
+    final descriptionFontSize = screenWidth * 0.038;
+
     final textToSpeak = '${tr(titleKey)}. ${tr(descriptionKey)}';
 
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8),
+      margin: EdgeInsets.symmetric(vertical: verticalPadding),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(horizontalPadding),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: iconColor, size: 28),
-            const SizedBox(width: 16),
+            Icon(icon, color: iconColor, size: iconSize),
+            SizedBox(width: horizontalPadding),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,19 +52,22 @@ class UpdateCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           tr(titleKey),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: titleFontSize),
                         ),
                       ),
                       PriorityTag(priority: priority),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  Text(tr(descriptionKey)),
-                  const SizedBox(height: 12),
+                  SizedBox(height: verticalPadding),
+                  Text(
+                    tr(descriptionKey),
+                    style: TextStyle(fontSize: descriptionFontSize),
+                  ),
+                  SizedBox(height: verticalPadding),
                   Align(
                     alignment: Alignment.centerRight,
-                    // Pass the fully translated string to the listen button
                     child: ListenButton(textToSpeak: textToSpeak),
                   ),
                 ],
@@ -68,4 +79,3 @@ class UpdateCard extends StatelessWidget {
     );
   }
 }
-

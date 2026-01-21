@@ -1,6 +1,8 @@
-// This is the crucial import that was missing. It defines all the standard Flutter widgets.
-import 'package:flutter/material.dart';
+// home_screen.dart
 
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart'; // Import geolocator
+import 'package:krishi_rath/features/chatbot/screens/chatbot_screen.dart';
 import 'package:krishi_rath/features/community/screens/community_forum_screen.dart';
 import 'package:krishi_rath/features/crop_advisory/screens/crop_advisory_screen.dart';
 import 'package:krishi_rath/features/home/widgets/feature_button.dart';
@@ -11,7 +13,11 @@ import 'package:krishi_rath/services/localization_service.dart';
 
 // The actual Home Screen UI
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  // Add a final variable to hold the location data
+  final Position? position;
+
+  // Update the constructor to accept the location data
+  const HomeScreen({super.key, this.position});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +32,7 @@ class HomeScreen extends StatelessWidget {
         title: Text(tr('welcome_title')),
         actions: [
           Chip(
-            backgroundColor: Colors.white.withOpacity(0.3),
+            backgroundColor: const Color.fromRGBO(255, 255, 255, 0.3),
             label: const Text('Online', style: TextStyle(color: Colors.white)),
             avatar: const Icon(Icons.wifi, color: Colors.white, size: 16),
           ),
@@ -41,7 +47,8 @@ class HomeScreen extends StatelessWidget {
           children: [
             _buildHeader(context, tr),
             const SizedBox(height: 16),
-            const WeatherCard(),
+            // Pass the location data down to the WeatherCard widget
+            WeatherCard(position: position),
             const SizedBox(height: 16),
             _buildFeatureGrid(context, tr),
             const SizedBox(height: 16),
@@ -50,6 +57,16 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
+      // Add floating action button for chatbot
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _openChatbot(context);
+        },
+        backgroundColor: Theme.of(context).primaryColor,
+        foregroundColor: Colors.white,
+        child: const Icon(Icons.chat_bubble_outline),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
@@ -161,7 +178,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           Image.network(
-            'https://images.unsplash.com/photo-1594495894542-a08dc9213158?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG9otby1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://images.unsplash.com/photo-1594495894542-a08dc9213158?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
             height: 200,
             width: double.infinity,
             fit: BoxFit.cover,
@@ -178,5 +195,11 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-}
 
+  void _openChatbot(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ChatbotScreen()),
+    );
+  }
+}

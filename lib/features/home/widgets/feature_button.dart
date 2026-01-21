@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class FeatureButton extends StatelessWidget {
-  // Now accepts a single 'title' which is already translated
   final String title;
   final IconData icon;
   final Color color;
@@ -17,24 +16,33 @@ class FeatureButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Adaptive sizes
+    final double padding = screenWidth * 0.04; // 4% of screen width
+    final double iconSize = screenWidth * 0.08; // 8% of screen width
+    final double fontSize = screenWidth * 0.04; // 4% of screen width
+
     return Card(
       color: color,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(padding * 0.5)),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(padding * 0.5),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(padding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(icon, color: Colors.white, size: 32),
+              Icon(icon, color: Colors.white, size: iconSize),
               Text(
                 title,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: fontSize,
+                ),
               ),
             ],
           ),
@@ -43,4 +51,3 @@ class FeatureButton extends StatelessWidget {
     );
   }
 }
-
