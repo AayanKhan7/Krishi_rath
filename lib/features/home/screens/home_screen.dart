@@ -1,9 +1,10 @@
 // home_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart'; // Import geolocator
 import 'package:krishi_rath/features/chatbot/screens/chatbot_screen.dart';
-import 'package:krishi_rath/features/community/screens/community_forum_screen.dart';
+import 'package:krishi_rath/features/community/screens/community_screen.dart';
 import 'package:krishi_rath/features/crop_advisory/screens/crop_advisory_screen.dart';
 import 'package:krishi_rath/features/home/widgets/feature_button.dart';
 import 'package:krishi_rath/features/home/widgets/weather_card.dart';
@@ -46,14 +47,14 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           children: [
             _buildHeader(context, tr),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             // Pass the location data down to the WeatherCard widget
             WeatherCard(position: position),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             _buildFeatureGrid(context, tr),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             _buildYourFarmSection(context),
-            const SizedBox(height: 80), // Space for the FAB
+            SizedBox(height: 80.h), // Space for the FAB
           ],
         ),
       ),
@@ -72,26 +73,26 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context, String Function(String) tr) {
     return Container(
-      padding: const EdgeInsets.only(bottom: 20),
+      padding: EdgeInsets.only(bottom: 20.h),
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(20),
-          bottomRight: Radius.circular(20),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(20.r),
+          bottomRight: Radius.circular(20.r),
         ),
       ),
       child: Center(
         child: Column(
           children: [
-            const CircleAvatar(
-              radius: 30,
+            CircleAvatar(
+              radius: 30.r,
               backgroundColor: Colors.yellow,
-              child: Icon(Icons.agriculture, size: 30, color: Colors.green),
+              child: Icon(Icons.agriculture, size: 30.sp, color: Colors.green),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Text(
               '3 ${tr('home_active_plots')}',
-              style: const TextStyle(color: Colors.white, fontSize: 16),
+              style: TextStyle(color: Colors.white, fontSize: 16.sp),
             ),
           ],
         ),
@@ -101,13 +102,13 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildFeatureGrid(BuildContext context, String Function(String) tr) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: GridView.count(
         crossAxisCount: 2,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
+        crossAxisSpacing: 16.w,
+        mainAxisSpacing: 16.h,
         childAspectRatio: 1.2,
         children: [
           FeatureButton(
@@ -152,7 +153,7 @@ class HomeScreen extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const CommunityForumScreen()));
+                      builder: (context) => const CommunityScreen()));
             },
           ),
         ],
@@ -162,13 +163,13 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildYourFarmSection(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      margin: EdgeInsets.symmetric(horizontal: 16.w),
       clipBehavior: Clip.antiAlias,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(16.w),
             child: Text(
               'Your Farm',
               style: Theme.of(context)
@@ -179,15 +180,15 @@ class HomeScreen extends StatelessWidget {
           ),
           Image.network(
             'https://images.unsplash.com/photo-1594495894542-a08dc9213158?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            height: 200,
+            height: 200.h,
             width: double.infinity,
             fit: BoxFit.cover,
             errorBuilder: (context, error, stackTrace) =>
-            const Icon(Icons.image, size: 50, color: Colors.grey),
+            Icon(Icons.image, size: 50.sp, color: Colors.grey),
           ),
-          const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text(
+          Padding(
+            padding: EdgeInsets.all(16.w),
+            child: const Text(
               'Last updated: Today morning',
             ),
           ),

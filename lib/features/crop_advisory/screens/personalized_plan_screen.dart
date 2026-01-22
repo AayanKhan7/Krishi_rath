@@ -1,5 +1,6 @@
 // personalized_plan_screen.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:krishi_rath/services/localization_service.dart';
 
 class PersonalizedPlanScreen extends StatelessWidget {
@@ -20,19 +21,18 @@ class PersonalizedPlanScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final recommendedCrop = _getRecommendedCrop(soilType);
     final cropNameKey = _getCropNameKey(recommendedCrop);
-    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(_tr('personalized_plan_title')),
       ),
       body: ListView(
-        padding: EdgeInsets.all(screenWidth * 0.04),
+        padding: EdgeInsets.all(16.w),
         children: [
-          _buildCropHeader(recommendedCrop, cropNameKey, screenWidth),
-          SizedBox(height: screenWidth * 0.04),
+          _buildCropHeader(recommendedCrop, cropNameKey),
+          SizedBox(height: 16.h),
           _buildSummaryCard(context, recommendedCrop, cropNameKey),
-          SizedBox(height: screenWidth * 0.04),
+          SizedBox(height: 16.h),
           _buildPlanStepCard(
             context,
             step: 1,
@@ -62,27 +62,27 @@ class PersonalizedPlanScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCropHeader(String recommendedCrop, String cropNameKey, double screenWidth) {
+  Widget _buildCropHeader(String recommendedCrop, String cropNameKey) {
     return Card(
       elevation: 4,
       color: Colors.green.shade50,
       child: Padding(
-        padding: EdgeInsets.all(screenWidth * 0.05),
+        padding: EdgeInsets.all(20.w),
         child: Column(
           children: [
-            Icon(Icons.eco, size: screenWidth * 0.15, color: Colors.green[700]),
-            SizedBox(height: screenWidth * 0.04),
+            Icon(Icons.eco, size: 56.sp, color: Colors.green[700]),
+            SizedBox(height: 16.h),
             Text(
               _tr('recommended_crop'),
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.grey),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.grey),
             ),
-            SizedBox(height: screenWidth * 0.02),
+            SizedBox(height: 8.h),
             Text(
               _tr(cropNameKey),
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.green),
+              style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold, color: Colors.green),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: screenWidth * 0.02),
+            SizedBox(height: 8.h),
             Text(
               recommendedCrop,
               style: const TextStyle(fontSize: 16, color: Colors.grey),
@@ -100,7 +100,7 @@ class PersonalizedPlanScreen extends StatelessWidget {
       color: color,
       elevation: 0,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.w),
         child: RichText(
           text: TextSpan(
             style: Theme.of(context).textTheme.bodyLarge,
@@ -147,34 +147,34 @@ class PersonalizedPlanScreen extends StatelessWidget {
       }) {
     return Card(
       elevation: 2,
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: EdgeInsets.only(bottom: 16.h),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 CircleAvatar(backgroundColor: color, child: Icon(icon, color: Colors.white)),
-                const SizedBox(width: 12),
+                SizedBox(width: 12.w),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('${_tr('Step')} $step', style: TextStyle(color: Colors.grey.shade600)),
-                    Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    Text(title, style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
                   ],
                 ),
               ],
             ),
-            const Divider(height: 24),
+            Divider(height: 24.h),
             ...tasks.map(
                   (task) => Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
+                padding: EdgeInsets.only(bottom: 8.h),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Icons.check_circle_outline, color: Theme.of(context).primaryColor, size: 20),
-                    const SizedBox(width: 8),
+                    Icon(Icons.check_circle_outline, color: Theme.of(context).primaryColor, size: 20.sp),
+                    SizedBox(width: 8.w),
                     Expanded(child: Text(task)),
                   ],
                 ),

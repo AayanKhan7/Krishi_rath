@@ -1,5 +1,6 @@
 // crop_advisor_form_screen.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 //import 'package:krishi_rath/common/widgets/bilingual_text.dart';
 import 'package:krishi_rath/features/crop_advisory/screens/personalized_plan_screen.dart';
 import 'package:krishi_rath/services/localization_service.dart';
@@ -100,7 +101,7 @@ class _CropAdvisorFormScreenState extends State<CropAdvisorFormScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.all(24.w),
         child: Form(
           key: _formKey,
           child: Column(
@@ -108,9 +109,9 @@ class _CropAdvisorFormScreenState extends State<CropAdvisorFormScreen> {
             children: [
               Text(
                 _tr('crop_advisor_form_land_details'),
-                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               _buildTextField(
                 label: _tr('crop_advisor_form_land_area'),
                 hint: _tr('crop_advisor_form_hint_area'),
@@ -118,38 +119,38 @@ class _CropAdvisorFormScreenState extends State<CropAdvisorFormScreen> {
                 validator: _validateArea,
                 keyboardType: TextInputType.number,
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               _buildSoilTypeDropdown(),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               _buildIrrigationDropdown(),
-              const SizedBox(height: 30),
+              SizedBox(height: 30.h),
               ElevatedButton(
                 onPressed: _getRecommendation,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurple,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  textStyle: const TextStyle(fontSize: 16),
+                  padding: EdgeInsets.symmetric(vertical: 16.h),
+                  textStyle: TextStyle(fontSize: 16.sp),
                 ),
                 child: Text(
                   _tr('crop_advisor_form_get_recommendation'),
                   style: const TextStyle(color: Colors.white),
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               if (_isRecommendationGenerated)
                 OutlinedButton(
                   onPressed: _resetForm,
-                  style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
+                  style: OutlinedButton.styleFrom(padding: EdgeInsets.symmetric(vertical: 16.h)),
                   child: Text(_tr('reset_form_button')),
                 ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               if (_isRecommendationGenerated)
                 ElevatedButton(
                   onPressed: _navigateToPlan,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    textStyle: const TextStyle(fontSize: 16),
+                    padding: EdgeInsets.symmetric(vertical: 16.h),
+                    textStyle: TextStyle(fontSize: 16.sp),
                   ),
                   child: Text(
                     _tr('crop_advisor_form_get_plan'),
@@ -199,13 +200,13 @@ class _CropAdvisorFormScreenState extends State<CropAdvisorFormScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         TextFormField(
           controller: controller,
           decoration: InputDecoration(
             hintText: hint,
             border: const OutlineInputBorder(),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
           ),
           keyboardType: keyboardType,
           textInputAction: TextInputAction.next,
@@ -220,12 +221,12 @@ class _CropAdvisorFormScreenState extends State<CropAdvisorFormScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(_tr('crop_advisor_form_soil_type'), style: const TextStyle(fontWeight: FontWeight.w600)),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         DropdownButtonFormField<String>(
           initialValue: _selectedSoilType,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
           ),
           hint: Text(_tr('crop_advisor_form_hint_soil')),
           items: soilTypes.map((soil) {
@@ -234,17 +235,17 @@ class _CropAdvisorFormScreenState extends State<CropAdvisorFormScreen> {
               child: Row(
                 children: [
                   Container(
-                    width: 40,
-                    height: 40,
+                    width: 40.w,
+                    height: 40.h,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(8.r),
                       image: DecorationImage(
                         image: AssetImage(soil['image']),
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12.w),
                   Text(_tr(soil['key'])),
                 ],
               ),
@@ -272,12 +273,12 @@ class _CropAdvisorFormScreenState extends State<CropAdvisorFormScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(_tr('crop_advisor_form_irrigation_type'), style: const TextStyle(fontWeight: FontWeight.w600)),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         DropdownButtonFormField<String>(
           initialValue: _selectedIrrigation,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
           ),
           hint: Text(_tr('crop_advisor_form_hint_irrigation')),
           items: irrigationMethods.map((method) {

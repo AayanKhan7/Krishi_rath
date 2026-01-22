@@ -1,6 +1,7 @@
 // dashboard_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart'; // Import geolocator
 import 'package:permission_handler/permission_handler.dart'; // Import permission_handler
 import 'package:krishi_rath/features/diary/screens/diary_screen.dart';
@@ -91,9 +92,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       );
     }
 
-    final screenWidth = MediaQuery.of(context).size.width;
-
-    double iconSize = screenWidth * 0.07;
+    double iconSize = 26.sp;
     iconSize = iconSize.clamp(20, 35);
 
     return Scaffold(
@@ -134,8 +133,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         selectedItemColor: Colors.green,
         unselectedItemColor: Colors.grey,
         showUnselectedLabels: true,
-        selectedLabelStyle: TextStyle(fontSize: screenWidth * 0.035),
-        unselectedLabelStyle: TextStyle(fontSize: screenWidth * 0.032),
+        selectedLabelStyle: TextStyle(fontSize: 13.sp),
+        unselectedLabelStyle: TextStyle(fontSize: 12.sp),
       ),
     );
   }

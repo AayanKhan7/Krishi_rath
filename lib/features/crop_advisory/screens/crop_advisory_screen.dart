@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:krishi_rath/common/widgets/listen_button.dart';
 import 'package:krishi_rath/features/crop_advisory/screens/crop_advisor_form_screen.dart';
 import 'package:krishi_rath/services/localization_service.dart';
@@ -15,16 +16,16 @@ class CropAdvisoryScreen extends StatelessWidget {
         title: Text(tr('crop_advisory_title')),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.w),
         child: Column(
           children: [
             Text(
               tr('crop_advisory_subtitle'),
-              style: const TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16.sp),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             _buildCustomizeCard(context, tr),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             _buildCropGrid(context, tr),
           ],
         ),
@@ -45,17 +46,17 @@ class CropAdvisoryScreen extends StatelessWidget {
           );
         },
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16.w),
           child: Row(
             children: [
-              const Icon(Icons.settings_suggest,
-                  color: Colors.blue, size: 32),
-              const SizedBox(width: 16),
+              Icon(Icons.settings_suggest,
+                  color: Colors.blue, size: 32.sp),
+              SizedBox(width: 16.w),
               Expanded(
                 child: Text(
                   tr('crop_advisory_customize'),
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 18.sp, fontWeight: FontWeight.bold),
                 ),
               ),
               CircleAvatar(
@@ -74,8 +75,8 @@ class CropAdvisoryScreen extends StatelessWidget {
       crossAxisCount: 2,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 16,
-      mainAxisSpacing: 16,
+      crossAxisSpacing: 16.w,
+      mainAxisSpacing: 16.h,
       children: [
         _buildCropCard(tr, 'Rice', 'crop_advisory_rice', Colors.green),
         _buildCropCard(tr, 'Wheat', 'crop_advisory_wheat', Colors.orange),
@@ -91,12 +92,12 @@ class CropAdvisoryScreen extends StatelessWidget {
     return Card(
       elevation: 1,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(8.w),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             CircleAvatar(
-              radius: 24,
+              radius: 24.r,
               backgroundColor: color.withOpacity(0.2),
               child: Icon(Icons.grass, color: color),
             ),
@@ -104,7 +105,7 @@ class CropAdvisoryScreen extends StatelessWidget {
               translatedName,
               textAlign: TextAlign.center,
               style:
-              const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
             ),
             // Correctly pass the translated name to the ListenButton
             ListenButton(textToSpeak: translatedName),
