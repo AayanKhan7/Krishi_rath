@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart'; // Import geolocator
 import 'package:krishi_rath/features/chatbot/screens/chatbot_screen.dart';
-import 'package:krishi_rath/features/community/screens/community_forum_screen.dart';
+import 'package:krishi_rath/features/community/screens/community_screen.dart';
 import 'package:krishi_rath/features/crop_advisory/screens/crop_advisory_screen.dart';
 import 'package:krishi_rath/features/home/widgets/feature_button.dart';
 import 'package:krishi_rath/features/home/widgets/weather_card.dart';
@@ -153,7 +153,7 @@ class HomeScreen extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const CommunityForumScreen()));
+                      builder: (context) => const CommunityScreen()));
             },
           ),
         ],

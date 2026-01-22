@@ -4,8 +4,8 @@ class Scheme {
   final String description;
   final String provider; // e.g., "Government of India"
   final String category;
-  final String eligibility;
-  final String benefits;
+  final List<String> eligibility;
+  final List<String> benefits;
   final String deadline;
   bool isSaved;
 
@@ -42,8 +42,8 @@ class Scheme {
       description: json['description'],
       provider: json['provider'],
       category: json['category'],
-      eligibility: json['eligibility'],
-      benefits: json['benefits'],
+      eligibility: List<String>.from(json['eligibility'] ?? []),
+      benefits: List<String>.from(json['benefits'] ?? []),
       deadline: json['deadline'],
       isSaved: json['isSaved'] ?? false,
     );

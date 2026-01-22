@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:krishi_rath/features/diary/models/diary_models.dart';
+import 'package:krishi_rath/features/diary/models/diary_entry_model.dart';
 import 'package:krishi_rath/features/diary/screens/full_calendar_screen.dart';
 import 'package:krishi_rath/features/diary/services/diary_service.dart';
+import 'package:krishi_rath/features/diary/services/diary_entry_service.dart';
 import 'package:krishi_rath/features/diary/widgets/todays_activity_card.dart';
+import 'package:krishi_rath/features/diary/widgets/create_diary_entry_form.dart';
+import 'package:krishi_rath/features/common/screens/saved_items_screen.dart';
 import 'package:krishi_rath/services/localization_service.dart';
 
 class DiaryScreen extends StatefulWidget {
@@ -15,6 +19,7 @@ class DiaryScreen extends StatefulWidget {
 
 class _DiaryScreenState extends State<DiaryScreen> {
   final DiaryService _diaryService = DiaryService();
+  final DiaryEntryService _diaryEntryService = DiaryEntryService();
   late Future<List<CropPlan>> _plansFuture;
 
   // Translation helper
@@ -28,6 +33,58 @@ class _DiaryScreenState extends State<DiaryScreen> {
 
   void _loadPlans() {
     _plansFuture = _diaryService.getPlans();
+  }
+
+  void _showCreateEntryForm({DiaryEntry? entry}) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => CreateDiaryEntryForm(
+        existingEntry: entry,
+        onEntryCreated: (newEntry) {
+          setState(() {});
+        },
+      ),
+    );
+  }
+
+  void _deleteEntry(DiaryEntry entry) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Entry'),
+        content: const Text('Are you sure you want to delete this diary entry?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      await _diaryEntryService.deleteEntry(entry.id);
+      setState(() {});
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Entry deleted successfully')),
+        );
+      }
+    }
+  }
+
+  void _toggleSaveEntry(DiaryEntry entry) async {
+    if (entry.isSaved) {
+      await _diaryEntryService.unsaveEntry(entry.id);
+    } else {
+      await _diaryEntryService.saveEntry(entry.id);
+    }
+    setState(() {});
   }
 
   void _updateActivityStatus(CropPlan plan, Activity activity, bool isCompleted) {
@@ -118,10 +175,26 @@ class _DiaryScreenState extends State<DiaryScreen> {
         title: Text(_tr('diary_title')),
         actions: [
           IconButton(
+            icon: const Icon(Icons.bookmark_outline),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SavedItemsScreen(),
+                ),
+              );
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () => setState(() => _loadPlans()),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => _showCreateEntryForm(),
+        icon: const Icon(Icons.add),
+        label: const Text('New Entry'),
       ),
       body: FutureBuilder<List<CropPlan>>(
         future: _plansFuture,
@@ -150,30 +223,44 @@ class _DiaryScreenState extends State<DiaryScreen> {
             }
           }
 
-          return ListView(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-            children: [
-              _buildSectionHeader(_tr('diary_my_crop_plans'), Icons.eco_outlined),
-              SizedBox(height: 8.h),
-              ...allPlans.map((plan) => _buildAtAGlanceCard(context, plan)),
-              SizedBox(height: 24.h),
-              _buildSectionHeader(_tr('diary_upcoming_tasks'), Icons.today),
-              SizedBox(height: 8.h),
-              if (todaysActivitiesByPlan.isNotEmpty)
-                ...todaysActivitiesByPlan.entries.expand((entry) {
-                  final plan = entry.key;
-                  final activities = entry.value;
-                  return activities.map((activity) => TodaysActivityCard(
-                    activity: activity,
-                    planTitle: plan.title,
-                    onStatusChanged: (isCompleted) =>
-                        _updateActivityStatus(plan, activity, isCompleted ?? false),
-                    onAddDetails: () => _showAddDetailsModal(plan, activity),
-                  ));
-                })
-              else
-                Center(child: Text(_tr('diary_no_tasks_today'))),
-            ],
+          return FutureBuilder<List<DiaryEntry>>(
+            future: _diaryEntryService.getEntries(),
+            builder: (context, entriesSnapshot) {
+              final entries = entriesSnapshot.data ?? [];
+              
+              return ListView(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+                children: [
+                  // Diary Entries Section
+                  if (entries.isNotEmpty) ...[
+                    _buildSectionHeader(_tr('diary_my_entries'), Icons.book),
+                    SizedBox(height: 8.h),
+                    ...entries.map((entry) => _buildDiaryEntryCard(entry)),
+                    SizedBox(height: 24.h),
+                  ],
+                  _buildSectionHeader(_tr('diary_my_crop_plans'), Icons.eco_outlined),
+                  SizedBox(height: 8.h),
+                  ...allPlans.map((plan) => _buildAtAGlanceCard(context, plan)),
+                  SizedBox(height: 24.h),
+                  _buildSectionHeader(_tr('diary_upcoming_tasks'), Icons.today),
+                  SizedBox(height: 8.h),
+                  if (todaysActivitiesByPlan.isNotEmpty)
+                    ...todaysActivitiesByPlan.entries.expand((entry) {
+                      final plan = entry.key;
+                      final activities = entry.value;
+                      return activities.map((activity) => TodaysActivityCard(
+                        activity: activity,
+                        planTitle: plan.title,
+                        onStatusChanged: (isCompleted) =>
+                            _updateActivityStatus(plan, activity, isCompleted ?? false),
+                        onAddDetails: () => _showAddDetailsModal(plan, activity),
+                      ));
+                    })
+                  else
+                    Center(child: Text(_tr('diary_no_tasks_today'))),
+                ],
+              );
+            },
           );
         },
       ),
@@ -238,6 +325,78 @@ class _DiaryScreenState extends State<DiaryScreen> {
         SizedBox(width: 8.w),
         Text(title, style: TextStyle(fontSize: 17.sp, fontWeight: FontWeight.bold)),
       ],
+    );
+  }
+
+  Widget _buildDiaryEntryCard(DiaryEntry entry) {
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 8.h),
+      child: Padding(
+        padding: EdgeInsets.all(16.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    entry.title,
+                    style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                PopupMenuButton(
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      child: const Text('Edit'),
+                      onTap: () {
+                        Future.delayed(Duration.zero, () {
+                          _showCreateEntryForm(entry: entry);
+                        });
+                      },
+                    ),
+                    PopupMenuItem(
+                      child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                      onTap: () => _deleteEntry(entry),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 8.h),
+            if (entry.cropName.isNotEmpty)
+              Chip(
+                label: Text(entry.cropName, style: TextStyle(fontSize: 12.sp)),
+                backgroundColor: Colors.green[50],
+              ),
+            SizedBox(height: 8.h),
+            Text(entry.content, style: TextStyle(fontSize: 14.sp)),
+            SizedBox(height: 12.h),
+            Row(
+              children: [
+                if (entry.weather != null && entry.weather!.isNotEmpty) ...[
+                  Icon(Icons.cloud, size: 16.sp, color: Colors.grey),
+                  SizedBox(width: 4.w),
+                  Text(entry.weather!, style: TextStyle(fontSize: 12.sp, color: Colors.grey)),
+                  SizedBox(width: 16.w),
+                ],
+                if (entry.soilMoisture != null) ...[
+                  Icon(Icons.water_drop, size: 16.sp, color: Colors.grey),
+                  SizedBox(width: 4.w),
+                  Text('${entry.soilMoisture}%', style: TextStyle(fontSize: 12.sp, color: Colors.grey)),
+                ],
+                const Spacer(),
+                IconButton(
+                  icon: Icon(
+                    entry.isSaved ? Icons.bookmark : Icons.bookmark_border,
+                    color: entry.isSaved ? Colors.green : null,
+                  ),
+                  onPressed: () => _toggleSaveEntry(entry),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -21,8 +21,8 @@ class SchemeService {
         description: 'Pradhan Mantri Kisan Samman Nidhi - Direct income support to farmers',
         provider: 'Government of India',
         category: 'Income Support',
-        eligibility: 'All farmers irrespective of holding size',
-        benefits: '₹6000 per year in 3 installments',
+        eligibility: ['All farmers irrespective of holding size', 'Valid Aadhaar card required'],
+        benefits: ['₹6000 per year in 3 installments', 'Direct bank transfer'],
         deadline: '31-12-2024',
       ),
       Scheme(
@@ -31,8 +31,8 @@ class SchemeService {
         description: 'Promotes soil testing and nutrient management',
         provider: 'Ministry of Agriculture',
         category: 'Soil Management',
-        eligibility: 'All farmers with land holdings',
-        benefits: 'Free soil testing and recommendations',
+        eligibility: ['All farmers with land holdings', 'Must provide land documents'],
+        benefits: ['Free soil testing', 'Nutrient recommendations', 'Expert guidance'],
         deadline: 'Ongoing',
       ),
       Scheme(
@@ -41,8 +41,8 @@ class SchemeService {
         description: 'Crop insurance scheme for farmers',
         provider: 'Government of India',
         category: 'Insurance',
-        eligibility: 'All farmers including share croppers',
-        benefits: 'Crop loss compensation up to ₹1,50,000',
+        eligibility: ['All farmers including share croppers', 'Valid land records'],
+        benefits: ['Crop loss compensation up to ₹1,50,000', 'Weather-based coverage', 'Natural disaster protection'],
         deadline: 'Season specific',
       ),
     ]);
