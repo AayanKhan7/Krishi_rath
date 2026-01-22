@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -54,54 +55,44 @@ class _PlantScannerScreenState extends State<PlantScannerScreen> {
   @override
   Widget build(BuildContext context) {
     final tr = localizationService.translate;
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    final horizontalPadding = screenWidth * 0.04;
-    final verticalSpacing = screenHeight * 0.02;
-    final iconSize = screenWidth * 0.15;
-    final cardPadding = screenWidth * 0.04;
-    final buttonHeight = screenHeight * 0.065;
-    final buttonFontSize = screenWidth * 0.045;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(tr('pest_detection_title')),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(horizontalPadding),
+        padding: EdgeInsets.all(16.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(tr('pest_detection_subtitle'),
-                style: TextStyle(fontSize: screenWidth * 0.045)),
-            SizedBox(height: verticalSpacing),
-            _buildCameraViewfinder(context, tr, iconSize, cardPadding),
-            SizedBox(height: verticalSpacing),
-            _buildInstructions(context, tr, screenWidth),
-            SizedBox(height: verticalSpacing * 1.5),
-            _buildActionButtons(tr, buttonHeight, buttonFontSize),
+                style: TextStyle(fontSize: 17.sp)),
+            SizedBox(height: 16.h),
+            _buildCameraViewfinder(context, tr),
+            SizedBox(height: 16.h),
+            _buildInstructions(context, tr),
+            SizedBox(height: 24.h),
+            _buildActionButtons(tr),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildCameraViewfinder(BuildContext context, String Function(String) tr,
-      double iconSize, double cardPadding) {
+  Widget _buildCameraViewfinder(BuildContext context, String Function(String) tr) {
     return Card(
       color: Colors.grey[800],
       clipBehavior: Clip.antiAlias,
       child: AspectRatio(
         aspectRatio: 1.0,
         child: Padding(
-          padding: EdgeInsets.all(cardPadding),
+          padding: EdgeInsets.all(16.w),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Chip(
                     label: Text('AI Ready'),
                     backgroundColor: Colors.green,
@@ -117,18 +108,18 @@ class _PlantScannerScreenState extends State<PlantScannerScreen> {
               Column(
                 children: [
                   Icon(Icons.camera_alt_outlined,
-                      size: iconSize, color: Colors.white70),
-                  SizedBox(height: iconSize * 0.1),
+                      size: 56.sp, color: Colors.white70),
+                  SizedBox(height: 6.h),
                   Text(tr('pest_detection_viewfinder_title'),
-                      style: const TextStyle(
+                      style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 18)),
-                  SizedBox(height: iconSize * 0.05),
+                          fontSize: 18.sp)),
+                  SizedBox(height: 3.h),
                   Text(
                     tr('pest_detection_viewfinder_subtitle'),
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70),
+                    style: const TextStyle(color: Colors.white70),
                   ),
                 ],
               ),
@@ -140,43 +131,43 @@ class _PlantScannerScreenState extends State<PlantScannerScreen> {
     );
   }
 
-  Widget _buildInstructions(BuildContext context, String Function(String) tr, double screenWidth) {
+  Widget _buildInstructions(BuildContext context, String Function(String) tr) {
     return Card(
       child: Padding(
-        padding: EdgeInsets.all(screenWidth * 0.04),
+        padding: EdgeInsets.all(16.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               tr('pest_detection_instructions_title'),
               style: TextStyle(
-                  fontSize: screenWidth * 0.045, fontWeight: FontWeight.bold),
+                  fontSize: 17.sp, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: screenWidth * 0.02),
-            _buildInstructionPoint(tr('pest_detection_instruction_1'), screenWidth),
-            _buildInstructionPoint(tr('pest_detection_instruction_2'), screenWidth),
-            _buildInstructionPoint(tr('pest_detection_instruction_3'), screenWidth),
-            _buildInstructionPoint(tr('pest_detection_instruction_4'), screenWidth),
+            SizedBox(height: 8.h),
+            _buildInstructionPoint(tr('pest_detection_instruction_1')),
+            _buildInstructionPoint(tr('pest_detection_instruction_2')),
+            _buildInstructionPoint(tr('pest_detection_instruction_3')),
+            _buildInstructionPoint(tr('pest_detection_instruction_4')),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildInstructionPoint(String text, double screenWidth) {
+  Widget _buildInstructionPoint(String text) {
     return Padding(
-      padding: EdgeInsets.only(bottom: screenWidth * 0.02),
+      padding: EdgeInsets.only(bottom: 8.h),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('• ', style: TextStyle(fontSize: screenWidth * 0.04)),
-          Expanded(child: Text(text, style: TextStyle(fontSize: screenWidth * 0.04))),
+          Text('• ', style: TextStyle(fontSize: 15.sp)),
+          Expanded(child: Text(text, style: TextStyle(fontSize: 15.sp))),
         ],
       ),
     );
   }
 
-  Widget _buildActionButtons(String Function(String) tr, double buttonHeight, double fontSize) {
+  Widget _buildActionButtons(String Function(String) tr) {
     return Column(
       children: [
         ElevatedButton.icon(
@@ -184,17 +175,17 @@ class _PlantScannerScreenState extends State<PlantScannerScreen> {
           icon: const Icon(Icons.camera_alt),
           label: Text(tr('pest_detection_capture_button')),
           style: ElevatedButton.styleFrom(
-            minimumSize: Size(double.infinity, buttonHeight),
-            textStyle: TextStyle(fontSize: fontSize),
+            minimumSize: Size(double.infinity, 52.h),
+            textStyle: TextStyle(fontSize: 17.sp),
           ),
         ),
-        SizedBox(height: buttonHeight * 0.2),
-        Text('Or', style: TextStyle(fontSize: fontSize * 0.9)),
+        SizedBox(height: 10.h),
+        Text('Or', style: TextStyle(fontSize: 15.sp)),
         TextButton.icon(
           onPressed: _uploadImage,
           icon: const Icon(Icons.upload_file),
           label: Text(tr('pest_detection_upload_button'),
-              style: TextStyle(fontSize: fontSize)),
+              style: TextStyle(fontSize: 17.sp)),
         ),
       ],
     );
@@ -217,53 +208,53 @@ class DiseaseReportScreen extends StatelessWidget {
         elevation: 2,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             /// Image Preview
             Card(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
               ),
               elevation: 4,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image.file(imageFile, height: 200, fit: BoxFit.cover),
+                borderRadius: BorderRadius.circular(16.r),
+                child: Image.file(imageFile, height: 200.h, fit: BoxFit.cover),
               ),
             ),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
 
             /// Report Heading
             Text(
               tr('Disease Report'),
-              style: const TextStyle(
-                fontSize: 22,
+              style: TextStyle(
+                fontSize: 22.sp,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12.h),
 
             /// Disease Card
             Card(
               color: Colors.red.shade50,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16.w),
                 child: Row(
                   children: [
-                    const Icon(Icons.warning_amber_rounded,
-                        color: Colors.red, size: 28),
-                    const SizedBox(width: 12),
+                    Icon(Icons.warning_amber_rounded,
+                        color: Colors.red, size: 28.sp),
+                    SizedBox(width: 12.w),
                     Expanded(
                       child: Text(
                         '⚠️ ${tr("Detected Disease")}: Leaf Blight',
-                        style: const TextStyle(
-                          fontSize: 18,
+                        style: TextStyle(
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.w600,
                           color: Colors.red,
                         ),
@@ -274,35 +265,35 @@ class DiseaseReportScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
 
             /// Solution Card
             Card(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
               ),
               elevation: 3,
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.lightbulb_outline,
-                            color: Colors.green, size: 26),
-                        const SizedBox(width: 8),
+                        Icon(Icons.lightbulb_outline,
+                            color: Colors.green, size: 26.sp),
+                        SizedBox(width: 8.w),
                         Text(
                           tr('Suggested Solutions'),
-                          style: const TextStyle(
-                            fontSize: 18,
+                          style: TextStyle(
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                             color: Colors.green,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
 
                     /// Solutions List
                     _buildSolutionPoint(
@@ -323,16 +314,16 @@ class DiseaseReportScreen extends StatelessWidget {
 
   Widget _buildSolutionPoint(String text, Color color) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      padding: EdgeInsets.symmetric(vertical: 6.h),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("• ",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          Text("• ",
+              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
           Expanded(
             child: Text(
               text,
-              style: TextStyle(fontSize: 16, color: color, height: 1.4),
+              style: TextStyle(fontSize: 16.sp, color: color, height: 1.4),
             ),
           ),
         ],

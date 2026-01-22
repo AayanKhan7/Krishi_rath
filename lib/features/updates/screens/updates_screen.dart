@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:krishi_rath/features/updates/widgets/update_card.dart';
 import 'package:krishi_rath/services/localization_service.dart';
 
@@ -8,13 +9,6 @@ class UpdatesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tr = localizationService.translate;
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    // Dynamic paddings
-    final horizontalPadding = screenWidth * 0.04;
-    final verticalPadding = screenHeight * 0.02;
-    final tabFontSize = screenWidth * 0.038;
 
     return DefaultTabController(
       length: 5,
@@ -22,14 +16,14 @@ class UpdatesScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text(
             tr('updates_title'),
-            style: TextStyle(fontSize: screenWidth * 0.045),
+            style: TextStyle(fontSize: 17.sp),
           ),
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(kToolbarHeight),
+            preferredSize: const Size.fromHeight(kToolbarHeight),
             child: TabBar(
               isScrollable: true,
-              labelStyle: TextStyle(fontSize: tabFontSize, fontWeight: FontWeight.bold),
-              unselectedLabelStyle: TextStyle(fontSize: tabFontSize),
+              labelStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+              unselectedLabelStyle: TextStyle(fontSize: 14.sp),
               tabs: [
                 Tab(text: tr('updates_tab_all')),
                 Tab(text: tr('updates_tab_alerts')),
@@ -41,7 +35,7 @@ class UpdatesScreen extends StatelessWidget {
           ),
         ),
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
           child: ListView(
             children: [
               const UpdateCard(
@@ -65,13 +59,13 @@ class UpdatesScreen extends StatelessWidget {
                 descriptionKey: 'updates_market_price_desc',
                 priority: 'Medium',
               ),
-              SizedBox(height: verticalPadding * 2),
+              SizedBox(height: 32.h),
               Center(
                 child: ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size(screenWidth * 0.5, screenHeight * 0.06),
-                    textStyle: TextStyle(fontSize: screenWidth * 0.04),
+                    minimumSize: Size(187.w, 48.h),
+                    textStyle: TextStyle(fontSize: 15.sp),
                   ),
                   child: Text(tr('updates_load_more')),
                 ),

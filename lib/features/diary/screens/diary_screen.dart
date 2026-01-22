@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:krishi_rath/features/diary/models/diary_models.dart';
 import 'package:krishi_rath/features/diary/screens/full_calendar_screen.dart';
 import 'package:krishi_rath/features/diary/services/diary_service.dart';
@@ -45,16 +46,12 @@ class _DiaryScreenState extends State<DiaryScreen> {
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        final screenWidth = MediaQuery.of(context).size.width;
-        final screenHeight = MediaQuery.of(context).size.height;
-        final padding = screenWidth * 0.05;
-
         return Padding(
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
-            top: padding,
-            left: padding,
-            right: padding,
+            top: 20.h,
+            left: 20.w,
+            right: 20.w,
           ),
           child: SingleChildScrollView(
             child: Column(
@@ -63,9 +60,9 @@ class _DiaryScreenState extends State<DiaryScreen> {
               children: [
                 Text(
                   _tr('diary_details_for').replaceFirst('{activity}', activity.title),
-                  style: TextStyle(fontSize: screenWidth * 0.05, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: screenHeight * 0.02),
+                SizedBox(height: 16.h),
                 TextField(
                   controller: expensesController,
                   keyboardType: TextInputType.number,
@@ -75,7 +72,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                     prefixIcon: const Icon(Icons.currency_rupee),
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.02),
+                SizedBox(height: 16.h),
                 TextField(
                   controller: notesController,
                   maxLines: 3,
@@ -85,10 +82,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
                     prefixIcon: const Icon(Icons.note),
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.03),
+                SizedBox(height: 24.h),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, screenHeight * 0.06),
+                    minimumSize: Size(double.infinity, 48.h),
                   ),
                   onPressed: () {
                     final expenses = double.tryParse(expensesController.text) ?? 0.0;
@@ -102,7 +99,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                   },
                   child: Text(_tr('diary_save_details')),
                 ),
-                SizedBox(height: screenHeight * 0.03),
+                SizedBox(height: 24.h),
               ],
             ),
           ),
@@ -115,9 +112,6 @@ class _DiaryScreenState extends State<DiaryScreen> {
   Widget build(BuildContext context) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final horizontalPadding = screenWidth * 0.04;
 
     return Scaffold(
       appBar: AppBar(
@@ -157,14 +151,14 @@ class _DiaryScreenState extends State<DiaryScreen> {
           }
 
           return ListView(
-            padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: screenHeight * 0.02),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
             children: [
-              _buildSectionHeader(_tr('diary_my_crop_plans'), Icons.eco_outlined, screenWidth),
-              SizedBox(height: screenHeight * 0.01),
-              ...allPlans.map((plan) => _buildAtAGlanceCard(context, plan, screenWidth, screenHeight)),
-              SizedBox(height: screenHeight * 0.03),
-              _buildSectionHeader(_tr('diary_upcoming_tasks'), Icons.today, screenWidth),
-              SizedBox(height: screenHeight * 0.01),
+              _buildSectionHeader(_tr('diary_my_crop_plans'), Icons.eco_outlined),
+              SizedBox(height: 8.h),
+              ...allPlans.map((plan) => _buildAtAGlanceCard(context, plan)),
+              SizedBox(height: 24.h),
+              _buildSectionHeader(_tr('diary_upcoming_tasks'), Icons.today),
+              SizedBox(height: 8.h),
               if (todaysActivitiesByPlan.isNotEmpty)
                 ...todaysActivitiesByPlan.entries.expand((entry) {
                   final plan = entry.key;
@@ -186,29 +180,29 @@ class _DiaryScreenState extends State<DiaryScreen> {
     );
   }
 
-  Widget _buildAtAGlanceCard(BuildContext context, CropPlan plan, double screenWidth, double screenHeight) {
+  Widget _buildAtAGlanceCard(BuildContext context, CropPlan plan) {
     final completed = plan.activities.where((a) => a.status == ActivityStatus.completed).length;
     final progress = plan.activities.isNotEmpty ? completed / plan.activities.length : 0.0;
     final daysSinceSowing = DateTime.now().difference(plan.sowDate).inDays;
 
     return Card(
       elevation: 2,
-      margin: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
+      margin: EdgeInsets.symmetric(vertical: 8.h),
       child: Padding(
-        padding: EdgeInsets.all(screenWidth * 0.04),
+        padding: EdgeInsets.all(16.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(plan.title, style: TextStyle(fontSize: screenWidth * 0.045, fontWeight: FontWeight.bold)),
-            SizedBox(height: screenHeight * 0.005),
+            Text(plan.title, style: TextStyle(fontSize: 17.sp, fontWeight: FontWeight.bold)),
+            SizedBox(height: 4.h),
             Text(_tr('diary_day_of_plan').replaceFirst('{days}', daysSinceSowing.toString())),
-            SizedBox(height: screenHeight * 0.015),
+            SizedBox(height: 12.h),
             LinearProgressIndicator(
               value: progress,
-              minHeight: screenHeight * 0.015,
-              borderRadius: BorderRadius.circular(4),
+              minHeight: 12.h,
+              borderRadius: BorderRadius.circular(4.r),
             ),
-            SizedBox(height: screenHeight * 0.01),
+            SizedBox(height: 8.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -216,7 +210,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                 Text('${(progress * 100).toStringAsFixed(0)}%'),
               ],
             ),
-            Divider(),
+            const Divider(),
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
@@ -237,12 +231,12 @@ class _DiaryScreenState extends State<DiaryScreen> {
     );
   }
 
-  Widget _buildSectionHeader(String title, IconData icon, double screenWidth) {
+  Widget _buildSectionHeader(String title, IconData icon) {
     return Row(
       children: [
-        Icon(icon, color: Colors.grey[700], size: screenWidth * 0.06),
-        SizedBox(width: screenWidth * 0.02),
-        Text(title, style: TextStyle(fontSize: screenWidth * 0.045, fontWeight: FontWeight.bold)),
+        Icon(icon, color: Colors.grey[700], size: 22.sp),
+        SizedBox(width: 8.w),
+        Text(title, style: TextStyle(fontSize: 17.sp, fontWeight: FontWeight.bold)),
       ],
     );
   }

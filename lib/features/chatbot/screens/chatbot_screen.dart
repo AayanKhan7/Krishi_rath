@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
@@ -39,7 +40,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
       return;
     }
     _model = GenerativeModel(
-      model: 'gemini-1.5-flash',
+      model: 'gemini-1.5-pro',
       apiKey: key,
       generationConfig: GenerationConfig(
         temperature: 0.7,
@@ -105,13 +106,6 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-
-    final double bubblePadding = screenWidth * 0.04;
-    final double fontSize = screenWidth * 0.04;
-    final double iconSize = screenWidth * 0.07;
-    final double spacing = screenWidth * 0.03;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Krishi Rath AI Assistant"),
@@ -129,11 +123,11 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
             items: ["English", "Hindi", "Marathi"]
                 .map((lang) => DropdownMenuItem(
               value: lang,
-              child: Text(lang, style: TextStyle(fontSize: fontSize)),
+              child: Text(lang, style: TextStyle(fontSize: 15.sp)),
             ))
                 .toList(),
           ),
-          SizedBox(width: spacing),
+          SizedBox(width: 12.w),
         ],
       ),
       body: SafeArea(
@@ -151,10 +145,10 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
               child: ListView.builder(
                 controller: _scrollController,
                 itemCount: messages.length + (isTyping ? 1 : 0),
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: EdgeInsets.symmetric(vertical: 10.h),
                 itemBuilder: (context, index) {
                   if (index == messages.length && isTyping) {
-                    return _buildTypingIndicator(spacing);
+                    return _buildTypingIndicator();
                   }
 
                   final msg = messages[index];
@@ -162,7 +156,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
 
                   return Padding(
                     padding: EdgeInsets.symmetric(
-                        vertical: spacing / 2, horizontal: spacing),
+                        vertical: 6.h, horizontal: 12.w),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: isUser
@@ -177,28 +171,28 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                         if (!isUser) const SizedBox(width: 8),
                         Flexible(
                           child: Container(
-                            padding: EdgeInsets.all(bubblePadding),
+                            padding: EdgeInsets.all(15.w),
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: isUser
                                     ? [Colors.blue, Colors.blueAccent]
                                     : [Colors.grey.shade300, Colors.grey.shade200],
                               ),
-                              borderRadius: BorderRadius.circular(bubblePadding),
+                              borderRadius: BorderRadius.circular(15.r),
                             ),
                             child: isUser
                                 ? Text(
                                     msg["text"] ?? "",
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: fontSize,
+                                      fontSize: 15.sp,
                                     ),
                                   )
                                 : SelectableText(
                                     msg["text"] ?? "",
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: fontSize,
+                                      fontSize: 15.sp,
                                     ),
                                   ),
                           ),
@@ -216,15 +210,15 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
               ),
             ),
             Container(
-              padding: EdgeInsets.all(spacing),
-              decoration: BoxDecoration(
+              padding: EdgeInsets.all(12.w),
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
               ),
               child: Row(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.mic_none, size: iconSize),
+                    icon: Icon(Icons.mic_none, size: 26.sp),
                     onPressed: isTyping ? null : () {},
                     color: Colors.grey,
                   ),
@@ -236,17 +230,17 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                       decoration: InputDecoration(
                         hintText: "Type your message...",
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(30.r),
                         ),
                         contentPadding: EdgeInsets.symmetric(
-                            horizontal: spacing, vertical: spacing),
+                            horizontal: 12.w, vertical: 12.h),
                       ),
-                      style: TextStyle(fontSize: fontSize),
+                      style: TextStyle(fontSize: 15.sp),
                     ),
                   ),
-                  SizedBox(width: spacing),
+                  SizedBox(width: 12.w),
                   IconButton(
-                    icon: Icon(Icons.send, size: iconSize),
+                    icon: Icon(Icons.send, size: 26.sp),
                     color: Colors.green.shade700,
                     onPressed: isTyping ? null : sendMessage,
                   ),
@@ -256,12 +250,12 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
           ],
         ),
       ),
-    );
+    ));
   }
 
-  Widget _buildTypingIndicator(double spacing) {
+  Widget _buildTypingIndicator() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: spacing, vertical: spacing),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
       child: Row(
         children: const [
           CircleAvatar(

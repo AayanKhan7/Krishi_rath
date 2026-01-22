@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:krishi_rath/features/market_prices/widgets/market_price_card.dart';
 import 'package:krishi_rath/services/localization_service.dart';
 
@@ -79,13 +80,6 @@ class _MarketPricesScreenState extends State<MarketPricesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    final double horizontalPadding = screenWidth * 0.04;
-    final double verticalSpacing = screenHeight * 0.01;
-    final double searchHeight = screenHeight * 0.07;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(_tr('market_prices_title')),
@@ -95,7 +89,7 @@ class _MarketPricesScreenState extends State<MarketPricesScreen> {
             onPressed: () {},
           ),
           Padding(
-            padding: EdgeInsets.only(right: horizontalPadding),
+            padding: EdgeInsets.only(right: 16.w),
             child: Chip(
               label: Text(_tr('market_prices_live')),
               backgroundColor: Colors.red,
@@ -107,42 +101,42 @@ class _MarketPricesScreenState extends State<MarketPricesScreen> {
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.fromLTRB(horizontalPadding, verticalSpacing * 2, horizontalPadding, verticalSpacing),
+            padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 8.h),
             child: SizedBox(
-              height: searchHeight,
+              height: 56.h,
               child: TextField(
                 controller: _searchController,
                 decoration: InputDecoration(
                   hintText: _tr('market_search_hint'),
-                  prefixIcon: Icon(Icons.search, size: searchHeight * 0.5),
+                  prefixIcon: Icon(Icons.search, size: 28.sp),
                   suffixIcon: IconButton(
-                    icon: Icon(Icons.mic, size: searchHeight * 0.5),
+                    icon: Icon(Icons.mic, size: 28.sp),
                     onPressed: _startVoiceSearch,
                   ),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.0),
+                    borderRadius: BorderRadius.circular(12.r),
                     borderSide: const BorderSide(color: Colors.grey),
                   ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: horizontalPadding / 2, vertical: verticalSpacing),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
                 ),
               ),
             ),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(horizontalPadding, 0, horizontalPadding, verticalSpacing),
+            padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 8.h),
             child: DropdownButtonFormField<String>(
               initialValue: _selectedMarket,
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(horizontal: horizontalPadding / 2, vertical: verticalSpacing),
+                contentPadding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.0),
+                  borderRadius: BorderRadius.circular(12.r),
                   borderSide: const BorderSide(color: Colors.grey),
                 ),
               ),
               items: _marketList.map((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value, style: TextStyle(fontSize: screenWidth * 0.04)),
+                  child: Text(value, style: TextStyle(fontSize: 15.sp)),
                 );
               }).toList(),
               onChanged: (String? newValue) {
@@ -156,12 +150,12 @@ class _MarketPricesScreenState extends State<MarketPricesScreen> {
           Expanded(
             child: LayoutBuilder(builder: (context, constraints) {
               return ListView.builder(
-                padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
                 itemCount: _filteredMarketData.length,
                 itemBuilder: (context, index) {
                   final marketData = _filteredMarketData[index];
                   return Padding(
-                    padding: EdgeInsets.only(bottom: verticalSpacing),
+                    padding: EdgeInsets.only(bottom: 8.h),
                     child: MarketPriceCard(
                       cropName: marketData['cropName'],
                       hindiCropName: marketData['hindiCropName'],
